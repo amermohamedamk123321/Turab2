@@ -1,0 +1,265 @@
+{
+  "nav": {
+    "home": "Home",
+    "projects": "Projects",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "hero": {
+    "transform": "Transform",
+    "yourVision": "Your Vision Into",
+    "digitalReality": "Digital Reality",
+    "subtitle": "We create exceptional digital experiences that drive growth, engage users, and bring your boldest ideas to life.",
+    "slogan": "Most Powerful Software Company in Afghanistan",
+    "viewWork": "View Our Work",
+    "getInTouch": "Get in Touch",
+    "startProject": "Start Your Project",
+    "watchStory": "Watch Our Story",
+    "projectsDelivered": "Projects Delivered",
+    "clientSatisfaction": "Client Satisfaction",
+    "supportAvailable": "Support Available"
+  },
+  "services": {
+    "title": "Our",
+    "titleHighlight": "Services",
+    "subtitle": "We offer comprehensive digital solutions to help your business thrive in the digital age",
+    "security": {
+      "category": "Cyber Security",
+      "title": "Security Protection",
+      "description": "Comprehensive cybersecurity solutions to protect your business from threats. We provide advanced threat detection, vulnerability assessments, and 24/7 monitoring to keep your data safe and secure."
+    },
+    "software": {
+      "category": "IT Support",
+      "title": "Software & Update Services",
+      "description": "Keep your systems running smoothly with our professional software maintenance and update services. We handle installations, patches, and upgrades to ensure optimal performance and security compliance."
+    },
+    "web": {
+      "category": "Development",
+      "title": "Website & Application Services",
+      "description": "Custom web and application development tailored to your business needs. From responsive websites to powerful mobile apps, we build digital solutions that drive growth and engage your audience."
+    },
+    "learnMore": "Learn More",
+    "readyToTransform": "Ready to transform your digital presence?",
+    "startToday": "Start Your Project Today"
+  },
+  "featured": {
+    "title": "Featured",
+    "titleHighlight": "Projects",
+    "subtitle": "Discover how we've helped clients achieve their digital transformation goals",
+    "viewDetails": "View Project Details",
+    "metric": "{{metric}}"
+  },
+  "testimonials": {
+    "title": "What Our",
+    "titleHighlight": "Clients Say",
+    "subtitle": "Don't just take our word for it. Here's what our clients have to say about working with us.",
+    "clientSatisfaction": "Client Satisfaction",
+    "projectsCompleted": "Projects Completed",
+    "supportAvailable": "Support Available",
+    "averageRating": "Average Rating"
+  },
+  "cta": {
+    "title": "Ready to Build Something",
+    "titleHighlight": "Extraordinary?",
+    "subtitle": "Let's turn your vision into reality. Get started today with a free consultation and discover how we can transform your digital presence.",
+    "startConsultation": "Start Free Consultation",
+    "scheduleCall": "Schedule a Call",
+    "freeConsultation": "Free consultation included",
+    "noObligations": "No obligations or commitments",
+    "quickResponse": "Quick 24-hour response"
+  },
+  "projects": {
+    "title": "Our",
+    "titleHighlight": "Portfolio",
+    "subtitle": "Explore our collection of successful projects that have transformed businesses and created exceptional digital experiences for our clients.",
+    "allProjects": "All Projects",
+    "featured": "Featured",
+    "noProjects": "No projects found",
+    "adjustFilter": "Try adjusting your filter criteria.",
+    "projectGallery": "Project Gallery",
+    "technologiesUsed": "Technologies Used",
+    "challenge": "Challenge",
+    "solution": "Solution",
+    "result": "Result",
+    "talkToUs": "Talk to us about something like this",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "about": {
+    "title": "About",
+    "titleHighlight": "Turab Root",
+    "subtitle": "We're a passionate team of digital innovators dedicated to transforming ideas into exceptional digital experiences that drive real business results.",
+    "mission": {
+      "title": "Our",
+      "titleHighlight": "Mission",
+      "description": "To empower businesses with cutting-edge digital solutions that not only meet today's challenges but anticipate tomorrow's opportunities. We believe that great technology should be invisible, intuitive, and transformative.",
+      "projectsDelivered": "Projects Delivered",
+      "clientSatisfaction": "Client Satisfaction",
+      "supportAvailable": "Support Available"
+    },
+    "team": {
+      "title": "Meet Our",
+      "titleHighlight": "Team",
+      "subtitle": "The talented individuals behind every successful project"
+    },
+    "timeline": {
+      "title": "Our",
+      "titleHighlight": "Journey",
+      "subtitle": "Key milestones that shaped our growth and success",
+      "founded": "Company Founded",
+      "foundedDesc": "Started with a vision to transform digital experiences",
+      "projects": "50+ Projects Delivered",
+      "projectsDesc": "Reached major milestone in client satisfaction and project delivery",
+      "recognition": "Industry Recognition",
+      "recognitionDesc": "Awarded Best Digital Agency by Tech Innovation Awards"
+    },
+    "values": {
+      "title": "Our",
+      "titleHighlight": "Values",
+      "subtitle": "The principles that guide everything we do",
+      "innovation": "Innovation",
+      "innovationDesc": "We embrace cutting-edge technologies and creative solutions to deliver exceptional results.",
+      "collaboration": "Collaboration",
+      "collaborationDesc": "We believe in transparent communication and working closely with our clients as partners.",
+      "qualitySupport": "Quality & Support",
+      "qualitySupportDesc": "We deliver top-tier quality backed by dedicated support, ensuring your success long after launch."
+    },
+    "workWithUs": {
+      "title": "Work With",
+      "titleHighlight": "Us",
+      "description": "We're always excited to work on new projects and help bring innovative ideas to life. Whether you're a startup with a bold vision or an established company looking to modernize, we'd love to hear from you.",
+      "officeHours": "Office Hours",
+      "monFri": "Monday - Friday: 9AM - 6PM",
+      "sat": "Saturday: 10AM - 2PM",
+      "responseTime": "Response Time",
+      "initialConsultation": "Initial consultation: 24 hours",
+      "projectProposals": "Project proposals: 48 hours"
+    }
+  },
+  "contact": {
+    "title": "Get In",
+    "titleHighlight": "Touch",
+    "subtitle": "Ready to transform your digital presence? We'd love to hear about your project and explore how we can help bring your vision to life.",
+    "freeConsultation": "Free Consultation",
+    "freeConsultationDesc": "No obligations, just honest advice about your project",
+    "quickResponse": "Quick Response",
+    "quickResponseDesc": "We respond to all inquiries within 24 hours",
+    "confidential": "Confidential",
+    "confidentialDesc": "Your ideas and information are always protected",
+    "form": {
+      "title": "Send Us a",
+      "titleHighlight": "Message",
+      "name": "Name",
+      "namePlaceholder": "Your full name",
+      "email": "Email",
+      "emailPlaceholder": "your.email@example.com",
+      "subject": "Subject",
+      "subjectPlaceholder": "What's this about?",
+      "message": "Message",
+      "messagePlaceholder": "Tell us about your project, goals, and how we can help...",
+      "send": "Send Message",
+      "sending": "Sending Message...",
+      "successTitle": "Message sent successfully!",
+      "successDesc": "We'll get back to you within 24 hours.",
+      "errorTitle": "Failed to send message",
+      "errorDesc": "Please try again or contact us directly.",
+      "responseNote": "We typically respond within 24 hours during business days."
+    },
+    "info": {
+      "phone": "Phone",
+      "mobile": "Mobile",
+      "emailLabel": "Email",
+      "callNow": "Call Now",
+      "callMobile": "Call Mobile",
+      "sendEmail": "Send Email",
+      "office": "Office",
+      "clickToOpenMap": "Click to open full map",
+      "openFullMap": "Open full map",
+      "businessHours": "Business Hours",
+      "monFri": "Monday - Friday",
+      "monFriHours": "9:00 AM - 6:00 PM",
+      "saturday": "Saturday",
+      "satHours": "10:00 AM - 2:00 PM",
+      "sunday": "Sunday",
+      "closed": "Closed"
+    },
+    "faq": {
+      "title": "Frequently Asked",
+      "titleHighlight": "Questions",
+      "q1": "How long does a typical project take?",
+      "a1": "Project timelines vary based on scope and complexity. Simple websites typically take 4-6 weeks, while complex applications can take 3-6 months. We'll provide a detailed timeline during consultation.",
+      "q2": "Do you offer ongoing support?",
+      "a2": "Yes! We provide comprehensive maintenance packages including updates, security monitoring, and technical support to keep your project running smoothly.",
+      "q3": "Can you work with our existing team?",
+      "a3": "Absolutely! We love collaborating with in-house teams and can integrate seamlessly with your existing development processes and tools.",
+      "q4": "What's included in the consultation?",
+      "a4": "Our free consultation includes project scope analysis, technology recommendations, timeline estimates, and a detailed proposal with transparent pricing.",
+      "q5": "Do you work with startups?",
+      "a5": "Yes! We love working with startups and understand the unique challenges they face. We offer flexible payment options and scalable solutions that grow with your business.",
+      "q6": "What technologies do you use?",
+      "a6": "We use modern, proven technologies including React, Node.js, Python, and cloud platforms. We choose the best tech stack for each project's specific needs."
+    }
+  },
+  "dashboard": {
+    "title": "Admin",
+    "titleHighlight": "Dashboard",
+    "welcome": "Welcome back! Manage your projects and content here.",
+    "settings": "Settings",
+    "logout": "Logout",
+    "totalProjects": "Total Projects",
+    "activeClients": "Active Clients",
+    "pendingTasks": "Pending Tasks",
+    "unreadMessages": "Unread Messages",
+    "ready": "Dashboard Ready",
+    "readyDesc": "Your admin dashboard is set up.",
+    "nav": {
+      "admin": "Admin Panel",
+      "overview": "Overview",
+      "security": "Security",
+      "projects": "Projects",
+      "messages": "Messages",
+      "socialMedia": "Social Media"
+    },
+    "security": {
+      "title": "Security",
+      "addAdmin": "Add Admin",
+      "editAdmin": "Edit Admin",
+      "username": "Username",
+      "email": "Email",
+      "password": "Password",
+      "created": "Created",
+      "actions": "Actions",
+      "save": "Save",
+      "create": "Create",
+      "delete": "Delete",
+      "updated": "Admin updated successfully",
+      "created": "Admin created successfully",
+      "deleted": "Admin deleted successfully",
+      "confirmDelete": "Delete Admin?",
+      "deleteWarning": "This action cannot be undone."
+    }
+  },
+  "login": {
+    "title": "Admin Login",
+    "subtitle": "Enter your credentials to access the admin dashboard",
+    "email": "Email",
+    "password": "Password",
+    "cancel": "Cancel",
+    "signIn": "Sign In",
+    "signingIn": "Signing in...",
+    "successTitle": "Login successful",
+    "successDesc": "Welcome back to admin dashboard",
+    "errorTitle": "Login failed",
+    "errorDesc": "Invalid credentials. Please try again.",
+    "defaultCreds": "Default: admin@turabroot.com / admin123"
+  },
+  "footer": {
+    "ictService": "ICT Service",
+    "allRightsReserved": "All rights reserved."
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Oops! Page not found",
+    "backHome": "Return to Home"
+  }
+}
