@@ -6,10 +6,9 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import SectionHeading from "@/components/ui/SectionHeading";
 import ImageSlideshow from "@/components/ui/ImageSlideshow";
-import softwareImage from "@/assets/service-software.jpg";
-
 // Image URLs - can be replaced with local assets when images are added to src/assets/
 const securityImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fa3ffdea9113e4bf2a0708af641baa8b2?format=webp&width=800&height=1200";
+const softwareImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fd8bfbd7d247345a7800e9bfaa5e4f512?format=webp&width=800&height=1200";
 const desktopImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F48c0bc2265ba46e4b574642b9c0b630b?format=webp&width=800&height=1200";
 const webImage1Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fa54ff4944dd94143a1dbfb42166ad737?format=webp&width=800&height=1200";
 const webImage2Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F7fcd25ae96714dbca345fdfd59eb9997?format=webp&width=800&height=1200";
@@ -31,7 +30,7 @@ const Services = () => {
       category: t("services.software.category"),
       title: t("services.software.title"),
       description: t("services.software.description"),
-      image: softwareImage,
+      image: softwareImageUrl,
       isSlideshow: false,
       link: "/contact"
     },
