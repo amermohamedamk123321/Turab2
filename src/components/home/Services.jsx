@@ -1,3 +1,4 @@
+import React from "react";
 import { Button } from "@/components/ui/button";
 import MeshGradient from "@/components/ui/MeshGradient";
 import { ArrowRight } from "lucide-react";
@@ -5,14 +6,42 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import SectionHeading from "@/components/ui/SectionHeading";
-import ImageSlideshow from "@/components/ui/ImageSlideshow";
-// Image URLs - can be replaced with local assets when images are added to src/assets/
+
+// Image URLs
 const securityImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fa3ffdea9113e4bf2a0708af641baa8b2?format=webp&width=800&height=1200";
 const softwareImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fd8bfbd7d247345a7800e9bfaa5e4f512?format=webp&width=800&height=1200";
 const desktopImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F48c0bc2265ba46e4b574642b9c0b630b?format=webp&width=800&height=1200";
 const webImage1Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fa54ff4944dd94143a1dbfb42166ad737?format=webp&width=800&height=1200";
 const webImage2Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F7fcd25ae96714dbca345fdfd59eb9997?format=webp&width=800&height=1200";
 const webImage3Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fc138be7ed5744a44a1a304ba188e3a1d?format=webp&width=800&height=1200";
+
+// Simple image slideshow component
+const ImageSlideshow = ({ images }) => {
+  const [currentIndex, setCurrentIndex] = React.useState(0);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  return (
+    <div className="relative w-full h-64 lg:h-80 rounded-3xl overflow-hidden shadow-[0_8px_40px_-8px_rgba(96,165,250,0.2)]">
+      {images.map((image, index) => (
+        <img
+          key={index}
+          src={image}
+          alt={`Slide ${index + 1}`}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+            index === currentIndex ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      ))}
+      <div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent" />
+    </div>
+  );
+};
 
 const Services = () => {
   const { t } = useTranslation();
