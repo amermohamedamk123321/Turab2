@@ -38,6 +38,11 @@
       "title": "Website & Application Services",
       "description": "Custom web and application development tailored to your business needs. From responsive websites to powerful mobile apps, we build digital solutions that drive growth and engage your audience."
     },
+    "desktop": {
+      "category": "Enterprise Solutions",
+      "title": "Desktop Systems with Admin Dashboard",
+      "description": "Powerful desktop applications and administrative dashboards designed for enterprise needs. We create robust, scalable systems with intuitive interfaces for managing complex business operations and real-time analytics."
+    },
     "learnMore": "Learn More",
     "readyToTransform": "Ready to transform your digital presence?",
     "startToday": "Start Your Project Today"
