@@ -11,40 +11,8 @@ import SectionHeading from "@/components/ui/SectionHeading";
 const securityImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F7ba2dcca109e4fd8910770ed996c1ed4?format=webp&width=800&height=1200";
 const softwareImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fd8bfbd7d247345a7800e9bfaa5e4f512?format=webp&width=800&height=1200";
 const desktopImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F7b2d48541a1e4db6a279641f241b67a5?format=webp&width=800&height=1200";
-// Slideshow images for Website & Application Services
-const webSlide1Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F42bcd679898a492499c58ffbb59e829c?format=webp&width=800&height=1200";
-const webSlide2Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fa6d56b768a3345f2a5e2276a81b23638?format=webp&width=800&height=1200";
-const webSlide3Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F2060d14bc2ce47cbbad0678c718eec8f?format=webp&width=800&height=1200";
-const webSlide4Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fc273fe59d16e4693b89e40a601934407?format=webp&width=800&height=1200";
-
-// Image slideshow component with smooth animation
-const ImageSlideshow = ({ images }) => {
-  const [currentIndex, setCurrentIndex] = React.useState(0);
-
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [images.length]);
-
-  return (
-    <div className="relative w-full h-64 lg:h-80 rounded-3xl overflow-hidden shadow-[0_8px_40px_-8px_rgba(96,165,250,0.2)] flex items-center justify-center">
-      {images.map((image, index) => (
-        <motion.img
-          key={index}
-          src={image}
-          alt={`Slide ${index + 1}`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: index === currentIndex ? 1 : 0 }}
-          transition={{ duration: 1, ease: "easeInOut" }}
-          className="absolute w-full h-full object-contain"
-        />
-      ))}
-      <motion.div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent pointer-events-none rounded-3xl" />
-    </div>
-  );
-};
+// Website & Application Services image
+const webImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F6a64e8f773f14252acf370d1b9907bdd?format=webp&width=800&height=1200";
 
 const Services = () => {
   const { t } = useTranslation();
@@ -70,8 +38,8 @@ const Services = () => {
       category: t("services.web.category"),
       title: t("services.web.title"),
       description: t("services.web.description"),
-      images: [webSlide1Url, webSlide2Url, webSlide3Url, webSlide4Url],
-      isSlideshow: true,
+      image: webImageUrl,
+      isSlideshow: false,
       link: "/contact"
     },
     {
