@@ -17,7 +17,7 @@ const webSlide2Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4
 const webSlide3Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F2060d14bc2ce47cbbad0678c718eec8f?format=webp&width=800&height=1200";
 const webSlide4Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fc273fe59d16e4693b89e40a601934407?format=webp&width=800&height=1200";
 
-// Image slideshow component with smooth animation - compact version
+// Image slideshow component with smooth animation
 const ImageSlideshow = ({ images }) => {
   const [currentIndex, setCurrentIndex] = React.useState(0);
 
@@ -29,7 +29,7 @@ const ImageSlideshow = ({ images }) => {
   }, [images.length]);
 
   return (
-    <div className="relative w-full rounded-3xl overflow-hidden shadow-[0_8px_40px_-8px_rgba(96,165,250,0.2)]">
+    <div className="relative w-full h-64 lg:h-80 rounded-3xl overflow-hidden shadow-[0_8px_40px_-8px_rgba(96,165,250,0.2)] flex items-center justify-center">
       {images.map((image, index) => (
         <motion.img
           key={index}
@@ -38,7 +38,7 @@ const ImageSlideshow = ({ images }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: index === currentIndex ? 1 : 0 }}
           transition={{ duration: 1, ease: "easeInOut" }}
-          className="w-full h-auto object-contain"
+          className="absolute w-full h-full object-contain"
         />
       ))}
       <motion.div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent pointer-events-none rounded-3xl" />
