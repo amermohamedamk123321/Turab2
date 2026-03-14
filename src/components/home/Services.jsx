@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import SectionHeading from "@/components/ui/SectionHeading";
 
 // Image URLs
-const securityImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fa3ffdea9113e4bf2a0708af641baa8b2?format=webp&width=800&height=1200";
+const securityImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F7ba2dcca109e4fd8910770ed996c1ed4?format=webp&width=800&height=1200";
 const softwareImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fd8bfbd7d247345a7800e9bfaa5e4f512?format=webp&width=800&height=1200";
 const desktopImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F48c0bc2265ba46e4b574642b9c0b630b?format=webp&width=800&height=1200";
 // Slideshow images for Website & Application Services
