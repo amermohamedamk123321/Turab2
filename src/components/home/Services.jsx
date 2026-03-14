@@ -11,9 +11,11 @@ import SectionHeading from "@/components/ui/SectionHeading";
 const securityImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fa3ffdea9113e4bf2a0708af641baa8b2?format=webp&width=800&height=1200";
 const softwareImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fd8bfbd7d247345a7800e9bfaa5e4f512?format=webp&width=800&height=1200";
 const desktopImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F48c0bc2265ba46e4b574642b9c0b630b?format=webp&width=800&height=1200";
-const mobileWebsiteUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fa54ff4944dd94143a1dbfb42166ad737?format=webp&width=800&height=1200";
-const webImage2Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F7fcd25ae96714dbca345fdfd59eb9997?format=webp&width=800&height=1200";
-const webImage3Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fc138be7ed5744a44a1a304ba188e3a1d?format=webp&width=800&height=1200";
+// Slideshow images for Website & Application Services
+const webSlide1Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F42bcd679898a492499c58ffbb59e829c?format=webp&width=800&height=1200";
+const webSlide2Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fa6d56b768a3345f2a5e2276a81b23638?format=webp&width=800&height=1200";
+const webSlide3Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F2060d14bc2ce47cbbad0678c718eec8f?format=webp&width=800&height=1200";
+const webSlide4Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fc273fe59d16e4693b89e40a601934407?format=webp&width=800&height=1200";
 
 // Image slideshow component with smooth animation
 const ImageSlideshow = ({ images }) => {
@@ -68,7 +70,7 @@ const Services = () => {
       category: t("services.web.category"),
       title: t("services.web.title"),
       description: t("services.web.description"),
-      images: [mobileWebsiteUrl, webImage2Url, webImage3Url],
+      images: [webSlide1Url, webSlide2Url, webSlide3Url, webSlide4Url],
       isSlideshow: true,
       link: "/contact"
     },
