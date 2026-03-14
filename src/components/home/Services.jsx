@@ -86,7 +86,7 @@ const Services = () => {
                     <img
                       src={service.image}
                       alt={service.title}
-                      className={`w-full ${index === 1 || index === 3 ? "h-auto object-contain" : "h-64 lg:h-80 object-cover"}`}
+                      className={`w-full ${index === 1 || index === 2 || index === 3 ? "h-auto object-contain" : "h-64 lg:h-80 object-cover"}`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent" />
                   </div>
