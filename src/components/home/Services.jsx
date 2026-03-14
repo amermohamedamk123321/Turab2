@@ -10,7 +10,7 @@ import SectionHeading from "@/components/ui/SectionHeading";
 // Image URLs
 const securityImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F7ba2dcca109e4fd8910770ed996c1ed4?format=webp&width=800&height=1200";
 const softwareImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fd8bfbd7d247345a7800e9bfaa5e4f512?format=webp&width=800&height=1200";
-const desktopImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F48c0bc2265ba46e4b574642b9c0b630b?format=webp&width=800&height=1200";
+const desktopImageUrl = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F7b2d48541a1e4db6a279641f241b67a5?format=webp&width=800&height=1200";
 // Slideshow images for Website & Application Services
 const webSlide1Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F42bcd679898a492499c58ffbb59e829c?format=webp&width=800&height=1200";
 const webSlide2Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fa6d56b768a3345f2a5e2276a81b23638?format=webp&width=800&height=1200";
@@ -29,7 +29,7 @@ const ImageSlideshow = ({ images }) => {
   }, [images.length]);
 
   return (
-    <div className="relative w-full h-64 lg:h-80 rounded-3xl overflow-hidden shadow-[0_8px_40px_-8px_rgba(96,165,250,0.2)]">
+    <div className="relative w-full h-auto rounded-3xl overflow-hidden shadow-[0_8px_40px_-8px_rgba(96,165,250,0.2)] flex items-center justify-center bg-gray-900">
       {images.map((image, index) => (
         <motion.img
           key={index}
@@ -38,10 +38,10 @@ const ImageSlideshow = ({ images }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: index === currentIndex ? 1 : 0 }}
           transition={{ duration: 1, ease: "easeInOut" }}
-          className="absolute inset-0 w-full h-full object-cover"
+          className="w-full h-auto object-contain"
         />
       ))}
-      <motion.div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent pointer-events-none" />
+      <motion.div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent pointer-events-none rounded-3xl" />
     </div>
   );
 };
@@ -118,7 +118,7 @@ const Services = () => {
                     <img
                       src={service.image}
                       alt={service.title}
-                      className={`w-full ${index === 1 ? "h-auto object-contain" : "h-64 lg:h-80 object-cover"}`}
+                      className={`w-full ${index === 1 || index === 3 ? "h-auto object-contain" : "h-64 lg:h-80 object-cover"}`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent" />
                   </div>
