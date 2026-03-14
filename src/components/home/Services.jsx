@@ -17,7 +17,7 @@ const webSlide2Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4
 const webSlide3Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2F2060d14bc2ce47cbbad0678c718eec8f?format=webp&width=800&height=1200";
 const webSlide4Url = "https://cdn.builder.io/api/v1/image/assets%2F7469f803d36a4105ba11ae5a139f172c%2Fc273fe59d16e4693b89e40a601934407?format=webp&width=800&height=1200";
 
-// Image slideshow component with smooth animation
+// Image slideshow component with smooth animation - compact version
 const ImageSlideshow = ({ images }) => {
   const [currentIndex, setCurrentIndex] = React.useState(0);
 
@@ -29,7 +29,7 @@ const ImageSlideshow = ({ images }) => {
   }, [images.length]);
 
   return (
-    <div className="relative w-full h-auto rounded-3xl overflow-hidden shadow-[0_8px_40px_-8px_rgba(96,165,250,0.2)] flex items-center justify-center bg-gray-900">
+    <div className="relative w-full rounded-3xl overflow-hidden shadow-[0_8px_40px_-8px_rgba(96,165,250,0.2)]">
       {images.map((image, index) => (
         <motion.img
           key={index}
@@ -94,9 +94,9 @@ const Services = () => {
           className="mb-20"
         />
 
-        <div className="space-y-24 max-w-6xl mx-auto">
+        <div className="space-y-16 max-w-6xl mx-auto">
           {services.map((service, index) => (
-            <motion.div key={index} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: index * 0.1 }} viewport={{ once: true }} className={`flex flex-col ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} gap-8 lg:gap-16 items-center`}>
+            <motion.div key={index} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: index * 0.1 }} viewport={{ once: true }} className={`flex flex-col ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} gap-6 lg:gap-12 items-center`}>
               <div className="flex-1 space-y-5">
                 <span className="text-primary font-bold text-xs uppercase tracking-[0.2em]">{service.category}</span>
                 <h3 className="text-3xl md:text-4xl font-bold text-foreground leading-tight">{service.title}</h3>
