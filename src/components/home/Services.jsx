@@ -79,18 +79,14 @@ const Services = () => {
                 </div>
               </div>
               <motion.div className="flex-1 w-full" whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }}>
-                {service.isSlideshow ? (
-                  <ImageSlideshow images={service.images} alt={service.title} />
-                ) : (
-                  <div className="relative rounded-3xl overflow-hidden shadow-[0_8px_40px_-8px_rgba(96,165,250,0.2)]">
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className={`w-full ${index === 1 || index === 2 || index === 3 ? "h-auto object-contain" : "h-64 lg:h-80 object-cover"}`}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent" />
-                  </div>
-                )}
+                <div className="relative rounded-3xl overflow-hidden shadow-[0_8px_40px_-8px_rgba(96,165,250,0.2)]">
+                  <img
+                    src={service.image}
+                    alt={service.title}
+                    className={`w-full ${index === 1 || index === 2 || index === 3 ? "h-auto object-contain" : "h-64 lg:h-80 object-cover"}`}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent" />
+                </div>
               </motion.div>
             </motion.div>
           ))}
