@@ -69,14 +69,6 @@ const Services = () => {
                 <span className="text-primary font-bold text-xs uppercase tracking-[0.2em]">{service.category}</span>
                 <h3 className="text-3xl md:text-4xl font-bold text-foreground leading-tight">{service.title}</h3>
                 <p className="text-muted-foreground text-lg leading-relaxed">{service.description}</p>
-                <div className="pt-4">
-                  <Button asChild className="group rounded-full px-8">
-                    <Link to={service.link}>
-                      {t("services.learnMore")}
-                      <ArrowRight className="ms-2 h-4 w-4 group-hover:translate-x-1 transition-transform rtl:rotate-180" />
-                    </Link>
-                  </Button>
-                </div>
               </div>
               <motion.div className="flex-1 w-full" whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }}>
                 <div className="relative rounded-3xl overflow-hidden shadow-[0_8px_40px_-8px_rgba(96,165,250,0.2)]">
