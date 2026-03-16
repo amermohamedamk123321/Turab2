@@ -41,14 +41,14 @@ const ProjectModal = ({ project, open, onOpenChange, onContactClick }) => {
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-2xl w-full max-h-[80vh] p-0 bg-transparent border-0">
+        <DialogContent className="max-w-2xl w-full max-h-[85vh] sm:max-h-[80vh] p-0 bg-transparent border-0 overflow-y-auto">
           <DialogHeader>
             <VisuallyHidden>
               <DialogTitle>{project.title}</DialogTitle>
             </VisuallyHidden>
           </DialogHeader>
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.3 }} className="h-full">
-            <GlassCard variant="modal" className="h-full overflow-y-auto relative p-6">
+            <GlassCard variant="modal" className="h-full overflow-y-auto relative p-4 sm:p-6">
               <Button variant="ghost" size="sm" onClick={() => onOpenChange(false)} className="absolute top-4 end-4 z-10 w-10 h-10 rounded-full glass-hover" aria-label="Close modal">
                 <X className="h-6 w-6" />
               </Button>
