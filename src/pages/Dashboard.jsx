@@ -4,6 +4,7 @@ import DashboardOverview from "./dashboard/DashboardOverview";
 import SecuritySection from "./dashboard/SecuritySection";
 import ProjectsSection from "./dashboard/ProjectsSection";
 import MessagesSection from "./dashboard/MessagesSection";
+import ProjectRequestsSection from "./dashboard/ProjectRequestsSection";
 import SocialMediaSection from "./dashboard/SocialMediaSection";
 
 const Dashboard = () => {
@@ -14,6 +15,7 @@ const Dashboard = () => {
         <Route path="security" element={<SecuritySection />} />
         <Route path="projects" element={<ProjectsSection />} />
         <Route path="messages" element={<MessagesSection />} />
+        <Route path="project-requests" element={<ProjectRequestsSection />} />
         <Route path="social-media" element={<SocialMediaSection />} />
       </Routes>
     </DashboardLayout>

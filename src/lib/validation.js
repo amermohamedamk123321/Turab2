@@ -61,6 +61,16 @@ export const projectSchema = z.object({
   images: z.array(z.string()).max(20, "Max 20 gallery images").optional(),
 });
 
+// --- Project Request Form ---
+export const projectRequestSchema = z.object({
+  projectType: z.enum(["website", "web app", "mobile app", "desktop dashboard system", "AI and cyber security updates"], { message: "Please select a valid project type" }),
+  securityLevel: z.enum(["base level security", "medium level security", "high level security"], { message: "Please select a valid security level" }),
+  customFeatures: safeString(1, 2000, "Custom features and details"),
+  companyName: safeString(1, 100, "Company name"),
+  email: z.string().trim().email("Invalid email address").max(255, "Email too long"),
+  phone: z.string().trim().min(1, "Phone number is required").max(20, "Phone number too long").regex(/^[0-9\s+\-()]+$/, "Phone number contains invalid characters"),
+});
+
 // --- Helper to validate and return errors ---
 export const validateForm = (schema, data) => {
   const result = schema.safeParse(data);

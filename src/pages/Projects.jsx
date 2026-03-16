@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import ProjectCard from "@/components/projects/ProjectCard";
 import ProjectModal from "@/components/projects/ProjectModal";
+import ProjectRequestForm from "@/components/contact/ProjectRequestForm";
 import { GlassCard } from "@/components/ui/glass-card";
 import Aurora from "@/components/ui/Aurora";
 import { projectsApi } from "@/services/api";
@@ -90,6 +91,10 @@ const Projects = () => {
       </div>
 
       <ProjectModal project={selectedProject} open={modalOpen} onOpenChange={setModalOpen} onContactClick={handleContactClick} />
+
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-12 sm:mt-16 md:mt-20">
+        <ProjectRequestForm />
+      </section>
     </main>
   );
 };

@@ -3,7 +3,7 @@
  * Replace these functions with real API calls to your VPS backend.
  * All functions return promises to match real API behavior.
  */
-import { contactSchema, loginSchema, adminCreateSchema, adminUpdateSchema, projectSchema } from "@/lib/validation";
+import { contactSchema, loginSchema, adminCreateSchema, adminUpdateSchema, projectSchema, projectRequestSchema } from "@/lib/validation";
 
 const STORAGE_KEYS = {
   ADMINS: 'turab_admins',
@@ -11,6 +11,7 @@ const STORAGE_KEYS = {
   MESSAGES: 'turab_admin_messages',
   AUTH: 'turab_auth_token',
   SOCIAL_LINKS: 'turab_social_links',
+  PROJECT_REQUESTS: 'turab_project_requests',
 };
 
 // --- Helpers ---
@@ -198,6 +199,15 @@ const seedSocialLinks = () => {
 };
 seedSocialLinks();
 
+// Seed project requests (initialize empty)
+const seedProjectRequests = () => {
+  const requests = getStore(STORAGE_KEYS.PROJECT_REQUESTS);
+  if (requests.length === 0) {
+    setStore(STORAGE_KEYS.PROJECT_REQUESTS, []);
+  }
+};
+seedProjectRequests();
+
 // --- AUTH ---
 export const authApi = {
   login: async (email, password) => {
@@ -358,6 +368,45 @@ export const socialLinksApi = {
     await new Promise(r => setTimeout(r, 200));
     const links = getStore(STORAGE_KEYS.SOCIAL_LINKS);
     setStore(STORAGE_KEYS.SOCIAL_LINKS, links.filter(l => l.id !== id));
+    return true;
+  },
+};
+
+// --- PROJECT REQUESTS ---
+export const projectRequestsApi = {
+  list: async () => {
+    await new Promise(r => setTimeout(r, 200));
+    return getStore(STORAGE_KEYS.PROJECT_REQUESTS);
+  },
+  create: async (data) => {
+    const parsed = projectRequestSchema.safeParse(data);
+    if (!parsed.success) throw new Error(parsed.error.errors[0]?.message || "Invalid input");
+    const sanitized = parsed.data;
+    await new Promise(r => setTimeout(r, 300));
+    const requests = getStore(STORAGE_KEYS.PROJECT_REQUESTS);
+    const newRequest = {
+      id: crypto.randomUUID(),
+      projectType: sanitized.projectType,
+      securityLevel: sanitized.securityLevel,
+      customFeatures: sanitized.customFeatures,
+      companyName: sanitized.companyName,
+      email: sanitized.email,
+      phone: sanitized.phone,
+      createdAt: new Date().toISOString(),
+    };
+    requests.push(newRequest);
+    setStore(STORAGE_KEYS.PROJECT_REQUESTS, requests);
+    return newRequest;
+  },
+  getById: async (id) => {
+    await new Promise(r => setTimeout(r, 100));
+    const requests = getStore(STORAGE_KEYS.PROJECT_REQUESTS);
+    return requests.find(r => r.id === id) || null;
+  },
+  delete: async (id) => {
+    await new Promise(r => setTimeout(r, 200));
+    const requests = getStore(STORAGE_KEYS.PROJECT_REQUESTS);
+    setStore(STORAGE_KEYS.PROJECT_REQUESTS, requests.filter(r => r.id !== id));
     return true;
   },
 };
