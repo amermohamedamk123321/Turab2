@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogHeader } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { X, ChevronLeft, ChevronRight, MessageCircle, ExternalLink } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { VisuallyHidden } from "@/components/ui/visually-hidden";
 
 const ProjectModal = ({ project, open, onOpenChange, onContactClick }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -41,6 +42,11 @@ const ProjectModal = ({ project, open, onOpenChange, onContactClick }) => {
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-2xl w-full max-h-[80vh] p-0 bg-transparent border-0">
+          <DialogHeader>
+            <VisuallyHidden>
+              <DialogTitle>{project.title}</DialogTitle>
+            </VisuallyHidden>
+          </DialogHeader>
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.3 }} className="h-full">
             <GlassCard variant="modal" className="h-full overflow-y-auto relative p-6">
               <Button variant="ghost" size="sm" onClick={() => onOpenChange(false)} className="absolute top-4 end-4 z-10 w-10 h-10 rounded-full glass-hover" aria-label="Close modal">
