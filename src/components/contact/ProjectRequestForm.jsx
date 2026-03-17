@@ -25,8 +25,18 @@ const ProjectRequestForm = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
 
-  const projectTypes = ["website", "web app", "mobile app", "desktop dashboard system", "AI and cyber security updates"];
-  const securityLevels = ["base level security", "medium level security", "high level security"];
+  const projectTypes = [
+    { key: "website", label: t("projectRequest.projectTypes.website") },
+    { key: "web app", label: t("projectRequest.projectTypes.webApp") },
+    { key: "mobile app", label: t("projectRequest.projectTypes.mobileApp") },
+    { key: "desktop dashboard system", label: t("projectRequest.projectTypes.desktopDashboard") },
+    { key: "AI and cyber security updates", label: t("projectRequest.projectTypes.aiCybersecurity") }
+  ];
+  const securityLevels = [
+    { key: "base level security", label: t("projectRequest.securityLevels.base") },
+    { key: "medium level security", label: t("projectRequest.securityLevels.medium") },
+    { key: "high level security", label: t("projectRequest.securityLevels.high") }
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,14 +45,14 @@ const ProjectRequestForm = () => {
     const { success, data, errors } = validateForm(projectRequestSchema, formData);
     if (!success) {
       setFieldErrors(errors);
-      toast({ title: "Validation Error", description: Object.values(errors)[0], variant: "destructive" });
+      toast({ title: t("projectRequest.validationError"), description: Object.values(errors)[0], variant: "destructive" });
       return;
     }
 
     setIsLoading(true);
     try {
       await projectRequestsApi.create(data);
-      toast({ title: "Success", description: "Your project request has been submitted successfully!" });
+      toast({ title: t("projectRequest.successTitle"), description: t("projectRequest.successDesc") });
       setFormData({
         projectType: "",
         securityLevel: "",
@@ -53,7 +63,7 @@ const ProjectRequestForm = () => {
       });
       setFieldErrors({});
     } catch (error) {
-      toast({ title: "Error", description: error.message || "Failed to submit project request", variant: "destructive" });
+      toast({ title: t("projectRequest.errorTitle"), description: error.message || t("projectRequest.errorDesc"), variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
@@ -69,13 +79,13 @@ const ProjectRequestForm = () => {
     <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }}>
       <GlassCard className="p-8">
         <h2 className="text-2xl font-bold mb-6 text-center">
-          Project <span className="hero-gradient">Request</span>
+          {t("projectRequest.title")} <span className="hero-gradient">{t("projectRequest.titleHighlight")}</span>
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6" noValidate>
           <div className="grid md:grid-cols-2 gap-6">
             {/* Project Type */}
             <div className="space-y-2">
-              <Label htmlFor="projectType">Project Type *</Label>
+              <Label htmlFor="projectType">{t("projectRequest.projectType")}</Label>
               <select
                 id="projectType"
                 name="projectType"
@@ -83,9 +93,9 @@ const ProjectRequestForm = () => {
                 onChange={handleChange}
                 className={`w-full px-3 py-2 bg-background/50 border border-none rounded-md shadow-sm shadow-ring/10 focus:shadow-ring/20 focus:outline-none focus:ring-2 focus:ring-primary ${fieldErrors.projectType ? "ring-2 ring-destructive" : ""}`}
               >
-                <option value="">Select a project type</option>
+                <option value="">{t("projectRequest.selectProjectType")}</option>
                 {projectTypes.map(type => (
-                  <option key={type} value={type}>{type}</option>
+                  <option key={type.key} value={type.key}>{type.label}</option>
                 ))}
               </select>
               {fieldErrors.projectType && <p className="text-xs text-destructive">{fieldErrors.projectType}</p>}
@@ -93,7 +103,7 @@ const ProjectRequestForm = () => {
 
             {/* Security Level */}
             <div className="space-y-2">
-              <Label htmlFor="securityLevel">Security Level *</Label>
+              <Label htmlFor="securityLevel">{t("projectRequest.securityLevel")}</Label>
               <select
                 id="securityLevel"
                 name="securityLevel"
@@ -101,9 +111,9 @@ const ProjectRequestForm = () => {
                 onChange={handleChange}
                 className={`w-full px-3 py-2 bg-background/50 border border-none rounded-md shadow-sm shadow-ring/10 focus:shadow-ring/20 focus:outline-none focus:ring-2 focus:ring-primary ${fieldErrors.securityLevel ? "ring-2 ring-destructive" : ""}`}
               >
-                <option value="">Select a security level</option>
+                <option value="">{t("projectRequest.selectSecurityLevel")}</option>
                 {securityLevels.map(level => (
-                  <option key={level} value={level}>{level}</option>
+                  <option key={level.key} value={level.key}>{level.label}</option>
                 ))}
               </select>
               {fieldErrors.securityLevel && <p className="text-xs text-destructive">{fieldErrors.securityLevel}</p>}
@@ -112,13 +122,13 @@ const ProjectRequestForm = () => {
 
           {/* Company Name */}
           <div className="space-y-2">
-            <Label htmlFor="companyName">Company Name *</Label>
+            <Label htmlFor="companyName">{t("projectRequest.companyName")}</Label>
             <Input
               id="companyName"
               name="companyName"
               value={formData.companyName}
               onChange={handleChange}
-              placeholder="Enter your company name"
+              placeholder={t("projectRequest.companyNamePlaceholder")}
               maxLength={100}
               className={`bg-background/50 border-none shadow-sm shadow-ring/10 focus:shadow-ring/20 ${fieldErrors.companyName ? "ring-2 ring-destructive" : ""}`}
             />
@@ -127,14 +137,14 @@ const ProjectRequestForm = () => {
 
           {/* Email */}
           <div className="space-y-2">
-            <Label htmlFor="email">Email *</Label>
+            <Label htmlFor="email">{t("projectRequest.email")}</Label>
             <Input
               id="email"
               name="email"
               type="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="Enter your email address"
+              placeholder={t("projectRequest.emailPlaceholder")}
               maxLength={255}
               className={`bg-background/50 border-none shadow-sm shadow-ring/10 focus:shadow-ring/20 ${fieldErrors.email ? "ring-2 ring-destructive" : ""}`}
             />
@@ -143,14 +153,14 @@ const ProjectRequestForm = () => {
 
           {/* Phone Number */}
           <div className="space-y-2">
-            <Label htmlFor="phone">Phone Number *</Label>
+            <Label htmlFor="phone">{t("projectRequest.phone")}</Label>
             <Input
               id="phone"
               name="phone"
               type="tel"
               value={formData.phone}
               onChange={handleChange}
-              placeholder="Enter your phone number"
+              placeholder={t("projectRequest.phonePlaceholder")}
               maxLength={20}
               className={`bg-background/50 border-none shadow-sm shadow-ring/10 focus:shadow-ring/20 ${fieldErrors.phone ? "ring-2 ring-destructive" : ""}`}
             />
@@ -159,13 +169,13 @@ const ProjectRequestForm = () => {
 
           {/* Custom Features */}
           <div className="space-y-2">
-            <Label htmlFor="customFeatures">Custom Features & Details *</Label>
+            <Label htmlFor="customFeatures">{t("projectRequest.customFeatures")}</Label>
             <Textarea
               id="customFeatures"
               name="customFeatures"
               value={formData.customFeatures}
               onChange={handleChange}
-              placeholder="Describe the custom features and details you want for your project"
+              placeholder={t("projectRequest.customFeaturesPlaceholder")}
               maxLength={2000}
               rows={6}
               className={`bg-background/50 border-none shadow-sm shadow-ring/10 focus:shadow-ring/20 resize-none ${fieldErrors.customFeatures ? "ring-2 ring-destructive" : ""}`}
@@ -176,9 +186,9 @@ const ProjectRequestForm = () => {
 
           {/* Submit Button */}
           <Button type="submit" disabled={isLoading} className="w-full group bg-primary hover:bg-primary/90 rounded-full" size="lg">
-            {isLoading ? (<><Loader2 className="me-2 h-5 w-5 animate-spin" />Submitting...</>) : (<><Send className="me-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />Submit Request</>)}
+            {isLoading ? (<><Loader2 className="me-2 h-5 w-5 animate-spin" />{t("projectRequest.submitting")}</>) : (<><Send className="me-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />{t("projectRequest.submitButton")}</>)}
           </Button>
-          <div className="text-center text-sm text-muted-foreground" aria-live="polite"><p>We will review your request and get back to you soon.</p></div>
+          <div className="text-center text-sm text-muted-foreground" aria-live="polite"><p>{t("projectRequest.reviewNote")}</p></div>
         </form>
       </GlassCard>
     </motion.div>

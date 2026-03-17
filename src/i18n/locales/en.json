@@ -141,6 +141,42 @@
       "projectProposals": "Project proposals: 48 hours"
     }
   },
+  "projectRequest": {
+    "title": "Project",
+    "titleHighlight": "Request",
+    "projectType": "Project Type *",
+    "selectProjectType": "Select a project type",
+    "securityLevel": "Security Level *",
+    "selectSecurityLevel": "Select a security level",
+    "companyName": "Company Name *",
+    "companyNamePlaceholder": "Enter your company name",
+    "email": "Email *",
+    "emailPlaceholder": "Enter your email address",
+    "phone": "Phone Number *",
+    "phonePlaceholder": "Enter your phone number",
+    "customFeatures": "Custom Features & Details *",
+    "customFeaturesPlaceholder": "Describe the custom features and details you want for your project",
+    "submitButton": "Submit Request",
+    "submitting": "Submitting...",
+    "successTitle": "Success",
+    "successDesc": "Your project request has been submitted successfully!",
+    "errorTitle": "Error",
+    "errorDesc": "Failed to submit project request",
+    "validationError": "Validation Error",
+    "reviewNote": "We will review your request and get back to you soon.",
+    "projectTypes": {
+      "website": "website",
+      "webApp": "web app",
+      "mobileApp": "mobile app",
+      "desktopDashboard": "desktop dashboard system",
+      "aiCybersecurity": "AI and cyber security updates"
+    },
+    "securityLevels": {
+      "base": "base level security",
+      "medium": "medium level security",
+      "high": "high level security"
+    }
+  },
   "contact": {
     "title": "Get In",
     "titleHighlight": "Touch",
