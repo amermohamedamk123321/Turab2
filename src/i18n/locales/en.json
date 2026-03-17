@@ -223,6 +223,7 @@
       "security": "Security",
       "projects": "Projects",
       "messages": "Messages",
+      "client": "Clients",
       "socialMedia": "Social Media"
     },
     "security": {
@@ -242,6 +243,37 @@
       "deleted": "Admin deleted successfully",
       "confirmDelete": "Delete Admin?",
       "deleteWarning": "This action cannot be undone."
+    },
+    "client": {
+      "title": "Clients Report",
+      "total": "total",
+      "noClients": "No clients yet.",
+      "table": {
+        "company": "Company",
+        "projectType": "Project Type",
+        "securityLevel": "Security Level",
+        "email": "Email",
+        "date": "Date",
+        "actions": "Actions"
+      },
+      "details": {
+        "title": "Client Details",
+        "companyName": "Company Name",
+        "email": "Email",
+        "phone": "Phone Number",
+        "date": "Date",
+        "projectType": "Project Type",
+        "securityLevel": "Security Level",
+        "customFeatures": "Custom Features & Details",
+        "close": "Close",
+        "replyEmail": "Reply via Email"
+      },
+      "delete": {
+        "title": "Delete Client?",
+        "message": "Delete client request from",
+        "cancel": "Cancel",
+        "confirm": "Delete"
+      }
     }
   },
   "login": {

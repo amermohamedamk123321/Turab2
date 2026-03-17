@@ -69,8 +69,8 @@ const ProjectRequestsSection = () => {
         <div className="flex items-center justify-between mb-4 sm:mb-6">
           <div className="flex items-center gap-2 sm:gap-3">
             <Briefcase className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-            <h1 className="text-lg sm:text-2xl font-bold text-foreground">Project Requests Report</h1>
-            {requests.length > 0 && <Badge variant="secondary" className="text-[10px] sm:text-xs">{requests.length} total</Badge>}
+            <h1 className="text-lg sm:text-2xl font-bold text-foreground">{t("dashboard.client.title")}</h1>
+            {requests.length > 0 && <Badge variant="secondary" className="text-[10px] sm:text-xs">{requests.length} {t("dashboard.client.total")}</Badge>}
           </div>
         </div>
 
@@ -82,7 +82,7 @@ const ProjectRequestsSection = () => {
           ) : requests.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">
               <FileText className="h-12 w-12 mx-auto mb-3 opacity-30" />
-              <p>No project requests yet.</p>
+              <p>{t("dashboard.client.noClients")}</p>
             </div>
           ) : (
             <>
@@ -91,12 +91,12 @@ const ProjectRequestsSection = () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Company</TableHead>
-                      <TableHead>Project Type</TableHead>
-                      <TableHead>Security Level</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead className="text-end">Actions</TableHead>
+                      <TableHead>{t("dashboard.client.table.company")}</TableHead>
+                      <TableHead>{t("dashboard.client.table.projectType")}</TableHead>
+                      <TableHead>{t("dashboard.client.table.securityLevel")}</TableHead>
+                      <TableHead>{t("dashboard.client.table.email")}</TableHead>
+                      <TableHead>{t("dashboard.client.table.date")}</TableHead>
+                      <TableHead className="text-end">{t("dashboard.client.table.actions")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -172,45 +172,45 @@ const ProjectRequestsSection = () => {
       <Dialog open={!!viewRequest} onOpenChange={() => setViewRequest(null)}>
         <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Project Request Details</DialogTitle>
+            <DialogTitle>{t("dashboard.client.details.title")}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-muted-foreground">Company Name</p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.client.details.companyName")}</p>
                 <p className="text-sm font-semibold">{viewRequest?.companyName}</p>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Email</p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.client.details.email")}</p>
                 <p className="text-sm font-semibold break-all">{viewRequest?.email}</p>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Phone Number</p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.client.details.phone")}</p>
                 <p className="text-sm font-semibold">{viewRequest?.phone}</p>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Date</p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.client.details.date")}</p>
                 <p className="text-sm font-semibold">{viewRequest && new Date(viewRequest.createdAt).toLocaleDateString()}</p>
               </div>
             </div>
 
             <div className="border-t border-border pt-4 space-y-3">
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Project Type</p>
+                <p className="text-xs text-muted-foreground mb-1">{t("dashboard.client.details.projectType")}</p>
                 <Badge className={`text-xs ${getProjectTypeBadgeColor(viewRequest?.projectType)}`}>
                   {viewRequest?.projectType}
                 </Badge>
               </div>
 
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Security Level</p>
+                <p className="text-xs text-muted-foreground mb-1">{t("dashboard.client.details.securityLevel")}</p>
                 <Badge className={`text-xs ${getSecurityBadgeColor(viewRequest?.securityLevel)}`}>
                   {viewRequest?.securityLevel}
                 </Badge>
               </div>
 
               <div>
-                <p className="text-xs text-muted-foreground mb-2">Custom Features & Details</p>
+                <p className="text-xs text-muted-foreground mb-2">{t("dashboard.client.details.customFeatures")}</p>
                 <div className="bg-background/50 rounded-md p-3 border border-border">
                   <p className="text-sm whitespace-pre-wrap">{viewRequest?.customFeatures}</p>
                 </div>
@@ -219,9 +219,9 @@ const ProjectRequestsSection = () => {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setViewRequest(null)}>Close</Button>
+            <Button variant="outline" onClick={() => setViewRequest(null)}>{t("dashboard.client.details.close")}</Button>
             <Button asChild>
-              <a href={`mailto:${viewRequest?.email}`}>Reply via Email</a>
+              <a href={`mailto:${viewRequest?.email}`}>{t("dashboard.client.details.replyEmail")}</a>
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -231,12 +231,12 @@ const ProjectRequestsSection = () => {
       <Dialog open={!!deleteConfirm} onOpenChange={() => setDeleteConfirm(null)}>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
-            <DialogTitle className="text-destructive">Delete Project Request?</DialogTitle>
+            <DialogTitle className="text-destructive">{t("dashboard.client.delete.title")}</DialogTitle>
           </DialogHeader>
-          <p className="text-sm text-muted-foreground">Delete project request from <strong>{deleteConfirm?.companyName}</strong>?</p>
+          <p className="text-sm text-muted-foreground">{t("dashboard.client.delete.message")} <strong>{deleteConfirm?.companyName}</strong>?</p>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteConfirm(null)}>Cancel</Button>
-            <Button variant="destructive" onClick={() => handleDelete(deleteConfirm?.id)}>Delete</Button>
+            <Button variant="outline" onClick={() => setDeleteConfirm(null)}>{t("dashboard.client.delete.cancel")}</Button>
+            <Button variant="destructive" onClick={() => handleDelete(deleteConfirm?.id)}>{t("dashboard.client.delete.confirm")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
