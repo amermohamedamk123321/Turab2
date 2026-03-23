@@ -31,10 +31,16 @@ const apiRequest = async (endpoint, options = {}) => {
   }
 
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
     const response = await fetch(url, {
       ...options,
       headers,
+      signal: controller.signal,
     });
+
+    clearTimeout(timeout);
 
     // Handle 401 - token expired, try to refresh
     if (response.status === 401 && accessToken) {
@@ -75,7 +81,25 @@ const apiRequest = async (endpoint, options = {}) => {
     return handleResponse(response);
   } catch (error) {
     console.error('API request failed:', error);
-    throw new Error(error.message || 'Network error');
+
+    // Provide helpful error messages
+    let errorMessage = 'Network error';
+
+    if (error.name === 'AbortError') {
+      errorMessage = 'Request timeout - backend server may not be running';
+    } else if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+      errorMessage = `Cannot connect to backend at ${API_BASE_URL}. Make sure the backend server is running.`;
+    } else {
+      errorMessage = error.message || 'Network error';
+    }
+
+    console.error('API Error Details:', {
+      apiBaseUrl: API_BASE_URL,
+      endpoint: endpoint,
+      error: errorMessage
+    });
+
+    throw new Error(errorMessage);
   }
 };
 

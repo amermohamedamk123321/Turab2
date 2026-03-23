@@ -13,13 +13,20 @@ const FeaturedCarousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [featuredProjects, setFeaturedProjects] = useState([]);
+  const [error, setError] = useState(null);
   const { t } = useTranslation();
 
   useEffect(() => {
-    projectsApi.list().then(data => {
-      const featured = data.filter(p => p.featured);
-      setFeaturedProjects(featured.length > 0 ? featured : data.slice(0, 3));
-    });
+    projectsApi.list()
+      .then(data => {
+        const featured = data.filter(p => p.featured);
+        setFeaturedProjects(featured.length > 0 ? featured : data.slice(0, 3));
+      })
+      .catch(err => {
+        console.error('Failed to load projects:', err.message);
+        setError(err.message);
+        // Don't fail silently - just show no carousel
+      });
   }, []);
 
   useEffect(() => {
@@ -31,7 +38,14 @@ const FeaturedCarousel = () => {
     }
   }, [isAutoPlaying, featuredProjects.length]);
 
-  if (featuredProjects.length === 0) return null;
+  if (featuredProjects.length === 0) {
+    // If there's an error, log it but don't show error UI in carousel
+    // The page will still render without this component
+    if (error) {
+      console.warn('Featured carousel unavailable:', error);
+    }
+    return null;
+  }
 
   const nextSlide = () => { setCurrentSlide((prev) => (prev + 1) % featuredProjects.length); setIsAutoPlaying(false); };
   const prevSlide = () => { setCurrentSlide((prev) => (prev - 1 + featuredProjects.length) % featuredProjects.length); setIsAutoPlaying(false); };
