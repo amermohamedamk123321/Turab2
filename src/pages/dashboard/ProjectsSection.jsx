@@ -16,23 +16,16 @@ import { projectSchema, validateForm } from "@/lib/validation";
 
 const emptyForm = {
   title: "", description: "", status: "active",
-  url: "", techTags: "", thumbnail: "", images: [],
+  url: "", videoUrl: "", techTags: "",
+  challenge: "", solution: "", result: "", metric: "",
+  featured: false, isWebsite: false, category: "",
 };
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
-const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"];
-
-const fileToBase64 = (file) => new Promise((resolve, reject) => {
-  const reader = new FileReader();
-  reader.onload = () => resolve(reader.result);
-  reader.onerror = reject;
-  reader.readAsDataURL(file);
-});
-
-const validateFile = (file) => {
-  if (file.size > MAX_FILE_SIZE) return "File too large (max 5MB)";
-  if (!ALLOWED_IMAGE_TYPES.includes(file.type)) return "Invalid file type. Use JPEG, PNG, GIF, WebP, or SVG";
-  return null;
+// Helper function to extract YouTube video ID
+const extractVideoId = (url) => {
+  if (!url) return '';
+  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return match ? match[1] : '';
 };
 
 const ProjectsSection = () => {
@@ -46,8 +39,6 @@ const ProjectsSection = () => {
   const [submitting, setSubmitting] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [fieldErrors, setFieldErrors] = useState({});
-  const thumbnailRef = useRef(null);
-  const galleryRef = useRef(null);
 
   const fetchProjects = async () => {
     setLoading(true);
@@ -62,41 +53,15 @@ const ProjectsSection = () => {
     setEditing(p);
     setForm({
       title: p.title || "", description: p.description || "",
-      status: p.status || "active", url: p.url || "",
+      status: p.status || "active", url: p.url || "", videoUrl: p.videoUrl || "",
       techTags: Array.isArray(p.techTags) ? p.techTags.join(", ") : (p.techTags || ""),
-      thumbnail: p.thumbnail || "", images: p.images || [],
+      challenge: p.challenge || "", solution: p.solution || "", result: p.result || "", metric: p.metric || "",
+      featured: p.featured || false, isWebsite: p.isWebsite || false, category: p.category || "",
     });
     setFieldErrors({});
     setDialogOpen(true);
   };
 
-  const handleThumbnailChange = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const error = validateFile(file);
-    if (error) { toast({ title: "Invalid file", description: error, variant: "destructive" }); return; }
-    const base64 = await fileToBase64(file);
-    setForm(f => ({ ...f, thumbnail: base64 }));
-  };
-
-  const handleGalleryAdd = async (e) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length === 0) return;
-    for (const file of files) {
-      const error = validateFile(file);
-      if (error) { toast({ title: "Invalid file", description: `${file.name}: ${error}`, variant: "destructive" }); return; }
-    }
-    if (form.images.length + files.length > 20) {
-      toast({ title: "Too many images", description: "Maximum 20 gallery images", variant: "destructive" }); return;
-    }
-    const newImages = await Promise.all(files.map(fileToBase64));
-    setForm(f => ({ ...f, images: [...f.images, ...newImages] }));
-    if (galleryRef.current) galleryRef.current.value = "";
-  };
-
-  const removeGalleryImage = (index) => {
-    setForm(f => ({ ...f, images: f.images.filter((_, i) => i !== index) }));
-  };
 
   const updateField = (field, value) => {
     setForm(f => ({ ...f, [field]: value }));
@@ -119,8 +84,14 @@ const ProjectsSection = () => {
       const payload = {
         ...data,
         techTags: data.techTags ? data.techTags.split(",").map(s => s.trim()).filter(Boolean) : [],
-        thumbnail: form.thumbnail,
-        images: form.images,
+        videoUrl: form.videoUrl,
+        challenge: form.challenge,
+        solution: form.solution,
+        result: form.result,
+        metric: form.metric,
+        featured: form.featured,
+        isWebsite: form.isWebsite,
+        category: form.category,
       };
       if (editing) {
         await projectsApi.update(editing.id, payload);
@@ -278,51 +249,53 @@ const ProjectsSection = () => {
               <p className="text-xs text-muted-foreground text-end">{(form.description || "").length}/5000</p>
             </div>
 
-            {/* Thumbnail */}
+            {/* YouTube Video URL */}
             <div className="space-y-2">
-              <Label>Thumbnail</Label>
-              <div className="flex items-center gap-4">
-                {form.thumbnail ? (
-                  <div className="relative w-24 h-24 rounded-lg overflow-hidden border border-border">
-                    <img src={form.thumbnail} alt="Thumbnail" className="w-full h-full object-cover" />
-                    <button type="button" onClick={() => setForm(f => ({ ...f, thumbnail: "" }))} className="absolute top-1 right-1 w-5 h-5 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center">
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
-                ) : (
-                  <button type="button" onClick={() => thumbnailRef.current?.click()} className="w-24 h-24 rounded-lg border-2 border-dashed border-border hover:border-primary/50 flex flex-col items-center justify-center gap-1 transition-colors">
-                    <ImagePlus className="h-5 w-5 text-muted-foreground" />
-                    <span className="text-xs text-muted-foreground">Upload</span>
-                  </button>
-                )}
-                <input ref={thumbnailRef} type="file" accept="image/jpeg,image/png,image/gif,image/webp,image/svg+xml" onChange={handleThumbnailChange} className="hidden" />
-                {form.thumbnail && (
-                  <Button type="button" variant="outline" size="sm" onClick={() => thumbnailRef.current?.click()}>Change</Button>
-                )}
-              </div>
+              <Label>YouTube Video URL (auto-generates thumbnail)</Label>
+              <Input value={form.videoUrl} onChange={e => updateField("videoUrl", e.target.value)} maxLength={500} placeholder="https://www.youtube.com/watch?v=..." className={fieldErrors.videoUrl ? "ring-2 ring-destructive" : ""} />
+              {fieldErrors.videoUrl && <p className="text-xs text-destructive">{fieldErrors.videoUrl}</p>}
+              <p className="text-xs text-muted-foreground">Paste a YouTube URL and the thumbnail will be auto-generated from the video</p>
+              {form.videoUrl && (
+                <div className="w-24 h-24 rounded-lg overflow-hidden border border-border bg-muted flex items-center justify-center">
+                  <img src={`https://img.youtube.com/vi/${extractVideoId(form.videoUrl)}/maxresdefault.jpg`} alt="Thumbnail preview" className="w-full h-full object-cover" onError={(e) => e.target.style.display = 'none'} />
+                </div>
+              )}
             </div>
 
-            {/* Gallery Images */}
+            {/* Challenge, Solution, Result, Metric */}
             <div className="space-y-2">
-              <Label>Gallery Images ({form.images.length}/20)</Label>
-              <div className="flex flex-wrap gap-3">
-                {form.images.map((img, i) => (
-                  <div key={i} className="relative w-20 h-20 rounded-lg overflow-hidden border border-border">
-                    <img src={img} alt={`Gallery ${i + 1}`} className="w-full h-full object-cover" />
-                    <button type="button" onClick={() => removeGalleryImage(i)} className="absolute top-1 right-1 w-5 h-5 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center">
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
-                ))}
-                {form.images.length < 20 && (
-                  <button type="button" onClick={() => galleryRef.current?.click()} className="w-20 h-20 rounded-lg border-2 border-dashed border-border hover:border-primary/50 flex flex-col items-center justify-center gap-1 transition-colors">
-                    <Plus className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-[10px] text-muted-foreground">Add</span>
-                  </button>
-                )}
-                <input ref={galleryRef} type="file" accept="image/jpeg,image/png,image/gif,image/webp,image/svg+xml" multiple onChange={handleGalleryAdd} className="hidden" />
-              </div>
-              <p className="text-xs text-muted-foreground">Max 5MB per image (JPEG, PNG, GIF, WebP, SVG).</p>
+              <Label>Challenge</Label>
+              <Textarea value={form.challenge} onChange={e => updateField("challenge", e.target.value)} maxLength={5000} placeholder="What challenge did this project solve?" rows={2} />
+            </div>
+            <div className="space-y-2">
+              <Label>Solution</Label>
+              <Textarea value={form.solution} onChange={e => updateField("solution", e.target.value)} maxLength={5000} placeholder="How did you solve it?" rows={2} />
+            </div>
+            <div className="space-y-2">
+              <Label>Result</Label>
+              <Textarea value={form.result} onChange={e => updateField("result", e.target.value)} maxLength={5000} placeholder="What was the outcome?" rows={2} />
+            </div>
+            <div className="space-y-2">
+              <Label>Metric</Label>
+              <Input value={form.metric} onChange={e => updateField("metric", e.target.value)} maxLength={500} placeholder="e.g., 300% increase in engagement" />
+            </div>
+
+            {/* Category */}
+            <div className="space-y-2">
+              <Label>Category</Label>
+              <Input value={form.category} onChange={e => updateField("category", e.target.value)} maxLength={100} placeholder="Web, Mobile, Security, etc." />
+            </div>
+
+            {/* Checkboxes */}
+            <div className="grid grid-cols-2 gap-4">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" checked={form.featured} onChange={e => updateField("featured", e.target.checked)} className="rounded border-input" />
+                <span className="text-sm font-medium">Featured</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" checked={form.isWebsite} onChange={e => updateField("isWebsite", e.target.checked)} className="rounded border-input" />
+                <span className="text-sm font-medium">Is Website</span>
+              </label>
             </div>
 
             <DialogFooter>

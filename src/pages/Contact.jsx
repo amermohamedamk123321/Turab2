@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import ContactForm from "@/components/contact/ContactForm";
 import ContactInfo from "@/components/contact/ContactInfo";
+import ProjectRequestForm from "@/components/contact/ProjectRequestForm";
 import { GlassCard } from "@/components/ui/glass-card";
 import { MessageCircle, Clock, Shield } from "lucide-react";
 import { useSEO } from "@/hooks/use-seo";
@@ -47,6 +48,10 @@ const Contact = () => {
             <ContactInfo />
           </motion.div>
         </div>
+
+        <motion.div className="mt-12 sm:mt-16 md:mt-20 max-w-4xl mx-auto" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }}>
+          <ProjectRequestForm />
+        </motion.div>
 
         <motion.div className="mt-12 sm:mt-16 md:mt-20 max-w-4xl mx-auto" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }}>
           <GlassCard>

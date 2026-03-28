@@ -140,6 +140,42 @@
       "projectProposals": "پیشنهاد پروژه: ۴۸ ساعت"
     }
   },
+  "projectRequest": {
+    "title": "درخواست",
+    "titleHighlight": "پروژه",
+    "projectType": "نوع پروژه *",
+    "selectProjectType": "نوع پروژه را انتخاب کنید",
+    "securityLevel": "سطح امنیتی *",
+    "selectSecurityLevel": "سطح امنیتی را انتخاب کنید",
+    "companyName": "نام شرکت *",
+    "companyNamePlaceholder": "نام شرکت خود را وارد کنید",
+    "email": "ایمیل *",
+    "emailPlaceholder": "ایمیل خود را وارد کنید",
+    "phone": "شماره تلفن *",
+    "phonePlaceholder": "شماره تلفن خود را وارد کنید",
+    "customFeatures": "ویژگی‌های سفارشی و جزئیات *",
+    "customFeaturesPlaceholder": "ویژگی‌های سفارشی و جزئیاتی را که می‌خواهید برای پروژه تان داشته باشید را شرح دهید",
+    "submitButton": "ارسال درخواست",
+    "submitting": "در حال ارسال...",
+    "successTitle": "موفقیت",
+    "successDesc": "درخواست پروژه تان با موفقیت ارسال شد!",
+    "errorTitle": "خطا",
+    "errorDesc": "ارسال درخواست پروژه ناکام شد",
+    "validationError": "خطای اعتبارسنجی",
+    "reviewNote": "ما درخواست تان را بررسی می‌کنیم و به زودی با شما تماس می‌گیریم.",
+    "projectTypes": {
+      "website": "وب‌سایت",
+      "webApp": "اپلیکیشن وب",
+      "mobileApp": "اپلیکیشن موبایل",
+      "desktopDashboard": "سیستم داشبورد رایانه‌ای",
+      "aiCybersecurity": "به‌روزرسانی‌های هوش مصنوعی و امنیت سایبری"
+    },
+    "securityLevels": {
+      "base": "امنیت سطح پایه",
+      "medium": "امنیت سطح متوسط",
+      "high": "امنیت سطح بالا"
+    }
+  },
   "contact": {
     "title": "تماس با",
     "titleHighlight": "ما",
@@ -222,6 +258,7 @@
       "security": "امنیت",
       "projects": "پروژه‌ها",
       "messages": "پیام‌ها",
+      "client": "مشتریان",
       "socialMedia": "رسانه‌های اجتماعی"
     },
     "security": {
@@ -240,6 +277,37 @@
       "deleted": "مدیر با موفقیت حذف شد",
       "confirmDelete": "حذف مدیر؟",
       "deleteWarning": "این عمل قابل بازگشت نیست."
+    },
+    "client": {
+      "title": "گزارش مشتریان",
+      "total": "مجموع",
+      "noClients": "هنوز مشتری‌ای وجود ندارد.",
+      "table": {
+        "company": "شرکت",
+        "projectType": "نوع پروژه",
+        "securityLevel": "سطح امنیتی",
+        "email": "ایمیل",
+        "date": "تاریخ",
+        "actions": "عملیات"
+      },
+      "details": {
+        "title": "جزئیات مشتری",
+        "companyName": "نام شرکت",
+        "email": "ایمیل",
+        "phone": "شماره تلفن",
+        "date": "تاریخ",
+        "projectType": "نوع پروژه",
+        "securityLevel": "سطح امنیتی",
+        "customFeatures": "ویژگی‌های سفارشی و جزئیات",
+        "close": "بستن",
+        "replyEmail": "پاسخ از طریق ایمیل"
+      },
+      "delete": {
+        "title": "حذف درخواست مشتری؟",
+        "message": "حذف درخواست مشتری از",
+        "cancel": "لغو",
+        "confirm": "حذف"
+      }
     }
   },
   "login": {

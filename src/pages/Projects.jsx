@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import ProjectCard from "@/components/projects/ProjectCard";
 import ProjectModal from "@/components/projects/ProjectModal";
+import ProjectRequestForm from "@/components/contact/ProjectRequestForm";
 import { GlassCard } from "@/components/ui/glass-card";
 import Aurora from "@/components/ui/Aurora";
 import { projectsApi } from "@/services/api";
@@ -17,25 +18,32 @@ const Projects = () => {
   });
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [filter, setFilter] = useState("all");
   const { t } = useTranslation();
 
   useEffect(() => {
-    projectsApi.list().then(data => {
-      // Map admin data to the format ProjectCard/ProjectModal expect
-      const mapped = data.map(p => ({
-        ...p,
-        shortDescription: p.description || "",
-        thumbnail: p.thumbnail || "/placeholder.svg",
-        images: p.images || [],
-        techTags: Array.isArray(p.techTags) ? p.techTags : [],
-        videoUrl: p.videoUrl || "",
-      }));
-      setProjects(mapped);
-      setLoading(false);
-    });
+    projectsApi.list()
+      .then(data => {
+        // Map admin data to the format ProjectCard/ProjectModal expect
+        const mapped = data.map(p => ({
+          ...p,
+          shortDescription: p.description || "",
+          thumbnail: p.thumbnail || "/placeholder.svg",
+          images: p.images || [],
+          techTags: Array.isArray(p.techTags) ? p.techTags : [],
+          videoUrl: p.videoUrl || "",
+        }));
+        setProjects(mapped);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to load projects:', err);
+        setError(err.message);
+        setLoading(false);
+      });
   }, []);
 
   const filteredProjects = filter === "all" ? projects : projects.filter(p => p.featured);
@@ -71,6 +79,15 @@ const Projects = () => {
 
         {loading ? (
           <div className="flex justify-center py-12 sm:py-16 md:py-20"><Loader2 className="h-6 w-6 sm:h-8 sm:w-8 animate-spin text-primary" /></div>
+        ) : error ? (
+          <GlassCard className="p-8 text-center">
+            <p className="text-destructive mb-2">Error: {error}</p>
+            <p className="text-muted-foreground text-sm">
+              {error.includes('backend') ?
+                'The backend server may not be running. Please ensure the backend is started.' :
+                'Failed to load projects. Please refresh the page.'}
+            </p>
+          </GlassCard>
         ) : (
           <motion.div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }}>
             {filteredProjects.map((project, index) => (
@@ -90,6 +107,10 @@ const Projects = () => {
       </div>
 
       <ProjectModal project={selectedProject} open={modalOpen} onOpenChange={setModalOpen} onContactClick={handleContactClick} />
+
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-12 sm:mt-16 md:mt-20">
+        <ProjectRequestForm />
+      </section>
     </main>
   );
 };
