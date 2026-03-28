@@ -109,7 +109,9 @@ const Projects = () => {
       <ProjectModal project={selectedProject} open={modalOpen} onOpenChange={setModalOpen} onContactClick={handleContactClick} />
 
       <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-12 sm:mt-16 md:mt-20">
-        <ProjectRequestForm />
+        <div className="max-w-2xl mx-auto">
+          <ProjectRequestForm />
+        </div>
       </section>
     </main>
   );

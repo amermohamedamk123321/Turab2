@@ -36,7 +36,7 @@ const Hero = () => {
           transition={{ delay: 0.2, duration: 0.6 }}
           className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-tight text-white mb-3 sm:mb-4 md:mb-6"
         >
-          Turab Root
+          {t('hero.companyName')}
         </motion.h1>
 
         <motion.p
