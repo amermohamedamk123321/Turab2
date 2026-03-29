@@ -6,9 +6,9 @@
 import { contactSchema, loginSchema, adminCreateSchema, adminUpdateSchema, projectSchema, projectRequestSchema } from "@/lib/validation";
 
 // Get API base URL from environment
-// For Builder.io preview: use HTTPS protocol
-// For local development: use http://localhost:3001/api
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
+// For local development: use relative path (proxied through Vite)
+// For production: use absolute URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 // Track if we're in fallback mode (backend not available)
 let USE_FALLBACK = false;
