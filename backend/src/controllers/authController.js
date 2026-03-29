@@ -107,18 +107,21 @@ export const refresh = asyncHandler(async (req, res) => {
 export const logout = asyncHandler(async (req, res) => {
   const { refreshToken } = req.body;
 
+  // Require authentication
+  if (!req.user) {
+    throw new AppError('Authentication required', 401);
+  }
+
   if (refreshToken) {
     // Delete session from database
     db.prepare('DELETE FROM sessions WHERE refresh_token = ?').run(refreshToken);
   }
 
   // Log audit event
-  if (req.user) {
-    db.prepare(`
-      INSERT INTO audit_logs (admin_id, action, resource_type)
-      VALUES (?, ?, ?)
-    `).run(req.user.id, 'LOGOUT', 'AUTH');
-  }
+  db.prepare(`
+    INSERT INTO audit_logs (admin_id, action, resource_type)
+    VALUES (?, ?, ?)
+  `).run(req.user.id, 'LOGOUT', 'AUTH');
 
   res.json({
     success: true,

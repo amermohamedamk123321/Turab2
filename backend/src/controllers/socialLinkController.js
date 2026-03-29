@@ -16,20 +16,6 @@ export const listSocialLinks = asyncHandler(async (req, res) => {
 });
 
 /**
- * Get all social links (including disabled)
- * GET /api/social-links/admin
- * Admin only
- */
-export const listAllSocialLinks = asyncHandler(async (req, res) => {
-  const links = db.prepare('SELECT * FROM social_links ORDER BY platform ASC').all();
-
-  res.json({
-    success: true,
-    data: links,
-  });
-});
-
-/**
  * Get single social link
  * GET /api/social-links/:id
  * Public

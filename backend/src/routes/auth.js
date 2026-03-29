@@ -24,7 +24,7 @@ router.post('/refresh', refresh);
  * POST /api/auth/logout
  * Protected
  */
-router.post('/logout', logout);
+router.post('/logout', requireAuth(), logout);
 
 /**
  * Get current user info

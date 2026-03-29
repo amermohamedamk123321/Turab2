@@ -21,7 +21,7 @@ export const verifyToken = (req, res, next) => {
     const token = parts[1];
 
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret');
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = decoded;
       next();
     } catch (err) {
@@ -56,7 +56,7 @@ export const requireAuth = (requireAdmin = false) => {
       const token = parts[1];
 
       try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded;
 
         if (requireAdmin && req.user.role !== 'admin') {
