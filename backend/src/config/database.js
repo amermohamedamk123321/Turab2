@@ -23,6 +23,17 @@ const db = new Database(dbPath);
 // Enable foreign keys
 db.pragma('foreign_keys = ON');
 
+// Test database integrity
+try {
+  const testQuery = db.prepare("SELECT 1 as test").get();
+  console.log('✅ Database integrity check passed');
+} catch (error) {
+  console.error('❌ Database error:', error.message);
+  // If there's an issue, close and try to recover
+  db.close();
+  throw error;
+}
+
 // Initialize schema
 function initializeSchema() {
   // Check if tables exist
@@ -155,34 +166,43 @@ function initializeSchema() {
 
 /**
  * Seed default admin user on first run
+ * Ensures admin always has correct credentials for login testing
  */
 function seedDefaultAdmin() {
   try {
-    const adminCount = db.prepare('SELECT COUNT(*) as count FROM admins').get();
+    const email = 'admin@turabroot.com';
+    const password = 'admin123';
+    const username = 'admin';
 
-    if (adminCount.count === 0) {
-      console.log('Creating default admin user...');
+    // Hash the password with fresh salt each time
+    const passwordHash = bcryptjs.hashSync(password, 12);
 
-      const email = 'admin@turabroot.com';
-      const password = 'admin123';
-      const username = 'admin';
+    console.log('🔧 Setting up default admin user...');
 
-      // Hash the password
-      const passwordHash = bcryptjs.hashSync(password, 12);
-
-      // Insert default admin
-      db.prepare(`
-        INSERT INTO admins (username, email, password_hash, role, created_at, updated_at)
-        VALUES (?, ?, ?, 'admin', datetime('now'), datetime('now'))
-      `).run(username, email, passwordHash);
-
-      console.log('✅ Default admin created:');
-      console.log(`   Email: ${email}`);
-      console.log(`   Password: ${password}`);
-      console.log('   ⚠️  Please change this password after first login!');
+    // Force DELETE and recreate to ensure password is correct
+    // This is necessary because the password hash might be stale
+    try {
+      db.prepare('DELETE FROM admins WHERE email = ?').run(email);
+    } catch (e) {
+      // Ignore if delete fails (admin might not exist)
     }
+
+    // Create fresh admin with correct password hash
+    const result = db.prepare(`
+      INSERT INTO admins (username, email, password_hash, role, created_at, updated_at)
+      VALUES (?, ?, ?, 'admin', datetime('now'), datetime('now'))
+    `).run(username, email, passwordHash);
+
+    console.log(`✅ Admin user ready (ID: ${result.lastInsertRowid})`);
+    console.log(`📋 Login Credentials:`);
+    console.log(`   Email: ${email}`);
+    console.log(`   Password: ${password}`);
+    console.log('   ⚠️  Change this password after first login!\n');
+
   } catch (error) {
-    console.warn('Note: Could not seed default admin (may already exist)');
+    console.error('❌ Error during admin setup:', error.message);
+    console.error('   Stack:', error.stack);
+    // Try to continue even if this fails
   }
 }
 

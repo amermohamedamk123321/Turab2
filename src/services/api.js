@@ -251,16 +251,24 @@ export const authApi = {
     const parsed = loginSchema.safeParse({ email, password });
     if (!parsed.success) throw new Error(parsed.error.errors[0]?.message || "Invalid input");
 
-    const response = await apiRequest('/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      console.log('🔐 Attempting login for:', email);
+      const response = await apiRequest('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+      });
 
-    // Store tokens
-    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, response.data.accessToken);
-    localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, response.data.refreshToken);
+      console.log('✅ Login successful');
 
-    return response.data.admin;
+      // Store tokens
+      localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, response.data.accessToken);
+      localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, response.data.refreshToken);
+
+      return response.data.admin;
+    } catch (error) {
+      console.error('❌ Login failed:', error.message);
+      throw error;
+    }
   },
 
   logout: async () => {
