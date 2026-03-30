@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import fs from 'fs';
 import path from 'path';
+import bcryptjs from 'bcryptjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -152,7 +153,41 @@ function initializeSchema() {
   console.log('Database schema initialized successfully');
 }
 
+/**
+ * Seed default admin user on first run
+ */
+function seedDefaultAdmin() {
+  try {
+    const adminCount = db.prepare('SELECT COUNT(*) as count FROM admins').get();
+
+    if (adminCount.count === 0) {
+      console.log('Creating default admin user...');
+
+      const email = 'admin@turabroot.com';
+      const password = 'admin123';
+      const username = 'admin';
+
+      // Hash the password
+      const passwordHash = bcryptjs.hashSync(password, 12);
+
+      // Insert default admin
+      db.prepare(`
+        INSERT INTO admins (username, email, password_hash, role, created_at, updated_at)
+        VALUES (?, ?, ?, 'admin', datetime('now'), datetime('now'))
+      `).run(username, email, passwordHash);
+
+      console.log('✅ Default admin created:');
+      console.log(`   Email: ${email}`);
+      console.log(`   Password: ${password}`);
+      console.log('   ⚠️  Please change this password after first login!');
+    }
+  } catch (error) {
+    console.warn('Note: Could not seed default admin (may already exist)');
+  }
+}
+
 // Initialize on import
 initializeSchema();
+seedDefaultAdmin();
 
 export { db };
