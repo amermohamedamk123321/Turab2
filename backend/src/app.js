@@ -48,7 +48,7 @@ const globalLimiter = rateLimit({
   legacyHeaders: false,
   skip: (req) => {
     // Skip rate limiting for health checks
-    return req.path === '/health';
+    return req.path === '/health' || req.path === '/api/health';
   },
 });
 
@@ -92,10 +92,12 @@ app.use('/api/messages', contactLimiter, messageRoutes);
 app.use('/api/project-requests', projectRequestLimiter, projectRequestRoutes);
 app.use('/api/social-links', socialLinkRoutes);
 
-// Health check endpoint
-app.get('/health', (req, res) => {
+// Health check endpoints (available at both /health and /api/health)
+const healthResponse = (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
+};
+app.get('/health', healthResponse);
+app.get('/api/health', healthResponse);
 
 // ===== 404 HANDLER =====
 app.use((req, res) => {

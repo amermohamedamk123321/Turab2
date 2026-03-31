@@ -124,7 +124,11 @@ const checkBackendAvailability = async () => {
 
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 3000);
+    const timeout = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+    // Health endpoint available at /api/health (proxied) and /health (root)
+    // Try /api/health first since it goes through vite proxy
+    console.log('🏥 Checking backend health...');
 
     const response = await fetch(`${API_BASE_URL}/health`, {
       signal: controller.signal,
@@ -134,15 +138,17 @@ const checkBackendAvailability = async () => {
 
     if (response.ok) {
       USE_FALLBACK = false;
-      console.log('Backend is available');
+      console.log('✅ Backend is available');
       return false;
+    } else {
+      console.warn('⚠️  Backend health check returned status:', response.status);
     }
   } catch (error) {
-    console.warn('Backend not available, using fallback mode:', error.message);
+    console.warn('⚠️  Backend not available:', error.message);
   }
 
   USE_FALLBACK = true;
-  console.warn('Switched to fallback mode - backend not accessible');
+  console.warn('⚠️  Switched to fallback mode - using cached data');
   return true;
 };
 
