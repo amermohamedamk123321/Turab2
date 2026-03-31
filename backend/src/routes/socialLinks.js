@@ -1,7 +1,6 @@
 import express from 'express';
 import {
   listSocialLinks,
-  listAllSocialLinks,
   getSocialLink,
   createSocialLink,
   updateSocialLink,

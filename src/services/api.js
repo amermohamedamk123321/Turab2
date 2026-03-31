@@ -6,9 +6,9 @@
 import { contactSchema, loginSchema, adminCreateSchema, adminUpdateSchema, projectSchema, projectRequestSchema } from "@/lib/validation";
 
 // Get API base URL from environment
-// For Builder.io preview: use HTTPS protocol
-// For local development: use http://localhost:3001/api
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
+// For local development: use relative path (proxied through Vite)
+// For production: use absolute URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 // Track if we're in fallback mode (backend not available)
 let USE_FALLBACK = false;
@@ -122,27 +122,55 @@ const checkBackendAvailability = async () => {
 
   FALLBACK_CHECKED = true;
 
+  console.log('🔍 [Health Check] Starting backend availability check...');
+  console.log('🔍 [Health Check] API_BASE_URL:', API_BASE_URL);
+
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 3000);
+    const timeout = setTimeout(() => {
+      console.warn('⚠️  [Health Check] Request timeout after 5 seconds');
+      controller.abort();
+    }, 5000);
 
-    const response = await fetch(`${API_BASE_URL}/health`, {
+    const healthUrl = `${API_BASE_URL}/health`;
+    console.log('🔍 [Health Check] Fetching:', healthUrl);
+
+    const response = await fetch(healthUrl, {
       signal: controller.signal,
+      headers: {
+        'Accept': 'application/json',
+      }
     });
 
     clearTimeout(timeout);
 
+    console.log('🔍 [Health Check] Response status:', response.status);
+    console.log('🔍 [Health Check] Response ok:', response.ok);
+
+    let responseData;
+    try {
+      responseData = await response.text();
+      console.log('🔍 [Health Check] Response body:', responseData);
+    } catch (e) {
+      console.warn('⚠️  [Health Check] Could not read response body');
+    }
+
     if (response.ok) {
       USE_FALLBACK = false;
-      console.log('Backend is available');
+      console.log('✅ [Health Check] Backend is available!');
       return false;
+    } else {
+      console.warn('⚠️  [Health Check] Backend health check returned status:', response.status);
     }
   } catch (error) {
-    console.warn('Backend not available, using fallback mode:', error.message);
+    console.error('❌ [Health Check] Error:', error.name, '-', error.message);
+    if (error.name === 'AbortError') {
+      console.error('❌ [Health Check] Request was aborted (timeout)');
+    }
   }
 
   USE_FALLBACK = true;
-  console.warn('Switched to fallback mode - backend not accessible');
+  console.warn('⚠️  [Health Check] Switched to fallback mode - using cached data');
   return true;
 };
 
@@ -152,13 +180,18 @@ const checkBackendAvailability = async () => {
 const apiRequest = async (endpoint, options = {}) => {
   // Check backend availability
   if (!FALLBACK_CHECKED) {
+    console.log('🔍 [API] First request - checking backend availability...');
     await checkBackendAvailability();
   }
 
   // If backend is not available, throw error (will be handled by individual APIs)
   if (USE_FALLBACK) {
+    console.error('❌ [API] Backend unavailable - USE_FALLBACK is true');
+    console.error('❌ [API] FALLBACK_CHECKED:', FALLBACK_CHECKED);
     throw new Error('BACKEND_UNAVAILABLE');
   }
+
+  console.log('🔍 [API] Making request to:', endpoint);
 
   const url = `${API_BASE_URL}${endpoint}`;
   const headers = {
@@ -251,16 +284,24 @@ export const authApi = {
     const parsed = loginSchema.safeParse({ email, password });
     if (!parsed.success) throw new Error(parsed.error.errors[0]?.message || "Invalid input");
 
-    const response = await apiRequest('/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      console.log('🔐 Attempting login for:', email);
+      const response = await apiRequest('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+      });
 
-    // Store tokens
-    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, response.data.accessToken);
-    localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, response.data.refreshToken);
+      console.log('✅ Login successful');
 
-    return response.data.admin;
+      // Store tokens
+      localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, response.data.accessToken);
+      localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, response.data.refreshToken);
+
+      return response.data.admin;
+    } catch (error) {
+      console.error('❌ Login failed:', error.message);
+      throw error;
+    }
   },
 
   logout: async () => {
