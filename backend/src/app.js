@@ -38,18 +38,25 @@ app.use(cors(corsOptions));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
+// ===== HEALTH CHECK (before rate limiting) =====
+const healthResponse = (req, res) => {
+  const response = { status: 'ok', timestamp: new Date().toISOString() };
+  console.log('🏥 [Health] Health check request received');
+  res.json(response);
+};
+app.get('/health', healthResponse);
+app.get('/api/health', healthResponse);
+
 // ===== RATE LIMITING =====
 // Global rate limiter
+// Note: Health endpoints (/health, /api/health) are registered BEFORE this middleware,
+// so they completely bypass rate limiting
 const globalLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   max: 100, // 100 requests per minute
   message: 'Too many requests, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
-  skip: (req) => {
-    // Skip rate limiting for health checks
-    return req.path === '/health' || req.path === '/api/health';
-  },
 });
 
 app.use(globalLimiter);
@@ -91,13 +98,6 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/messages', contactLimiter, messageRoutes);
 app.use('/api/project-requests', projectRequestLimiter, projectRequestRoutes);
 app.use('/api/social-links', socialLinkRoutes);
-
-// Health check endpoints (available at both /health and /api/health)
-const healthResponse = (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-};
-app.get('/health', healthResponse);
-app.get('/api/health', healthResponse);
 
 // ===== 404 HANDLER =====
 app.use((req, res) => {
