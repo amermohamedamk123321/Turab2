@@ -6,7 +6,8 @@ import {
   updateProject,
   deleteProject,
 } from '../controllers/projectController.js';
-import { requireAuth, requireAdmin } from '../middleware/auth.js';
+import { sessionAuth } from '../middleware/sessionAuth.js';
+import { validateCsrfToken } from '../middleware/csrf.js';
 import {
   validateProjectCreate,
   validateProjectUpdate,
@@ -34,8 +35,8 @@ router.get('/:id', getProject);
  */
 router.post(
   '/',
-  requireAuth(),
-  requireAdmin,
+  sessionAuth,
+  validateCsrfToken,
   validateProjectCreate,
   handleValidationErrors,
   createProject
@@ -47,8 +48,8 @@ router.post(
  */
 router.put(
   '/:id',
-  requireAuth(),
-  requireAdmin,
+  sessionAuth,
+  validateCsrfToken,
   validateProjectUpdate,
   handleValidationErrors,
   updateProject
@@ -58,6 +59,6 @@ router.put(
  * Delete project (admin only)
  * DELETE /api/projects/:id
  */
-router.delete('/:id', requireAuth(), requireAdmin, deleteProject);
+router.delete('/:id', sessionAuth, validateCsrfToken, deleteProject);
 
 export default router;

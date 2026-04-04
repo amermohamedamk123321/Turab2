@@ -6,7 +6,8 @@ import {
   updateSocialLink,
   deleteSocialLink,
 } from '../controllers/socialLinkController.js';
-import { requireAuth, requireAdmin } from '../middleware/auth.js';
+import { sessionAuth } from '../middleware/sessionAuth.js';
+import { validateCsrfToken } from '../middleware/csrf.js';
 import {
   validateSocialLinkCreate,
   validateSocialLinkUpdate,
@@ -33,8 +34,8 @@ router.get('/:id', getSocialLink);
  */
 router.post(
   '/',
-  requireAuth(),
-  requireAdmin,
+  sessionAuth,
+  validateCsrfToken,
   validateSocialLinkCreate,
   handleValidationErrors,
   createSocialLink
@@ -46,8 +47,8 @@ router.post(
  */
 router.put(
   '/:id',
-  requireAuth(),
-  requireAdmin,
+  sessionAuth,
+  validateCsrfToken,
   validateSocialLinkUpdate,
   handleValidationErrors,
   updateSocialLink
@@ -57,6 +58,6 @@ router.put(
  * Delete social link (admin only)
  * DELETE /api/social-links/:id
  */
-router.delete('/:id', requireAuth(), requireAdmin, deleteSocialLink);
+router.delete('/:id', sessionAuth, validateCsrfToken, deleteSocialLink);
 
 export default router;

@@ -34,6 +34,40 @@ try {
   throw error;
 }
 
+/**
+ * Migrate database schema if needed
+ * Handles transition from JWT-based to session-based auth
+ */
+function migrateSchema() {
+  try {
+    // Check if sessions table has refresh_token column (old schema)
+    const sessionTableInfo = db.prepare("PRAGMA table_info(sessions)").all();
+    const hasRefreshToken = sessionTableInfo.some(col => col.name === 'refresh_token');
+
+    if (hasRefreshToken) {
+      console.log('Migrating sessions table from JWT to session-based auth...');
+
+      // Drop old sessions table and create new one
+      db.exec('DROP TABLE IF EXISTS sessions');
+      db.exec(`
+        CREATE TABLE IF NOT EXISTS sessions (
+          id TEXT PRIMARY KEY,
+          admin_id INTEGER NOT NULL,
+          csrf_token TEXT NOT NULL,
+          expires_at TIMESTAMP NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY(admin_id) REFERENCES admins(id) ON DELETE CASCADE
+        )
+      `);
+
+      console.log('✅ Sessions table migrated successfully');
+    }
+  } catch (error) {
+    console.warn('⚠️  Schema migration check failed:', error.message);
+    // Continue anyway - schema might already be correct
+  }
+}
+
 // Initialize schema
 function initializeSchema() {
   // Check if tables exist
@@ -43,6 +77,8 @@ function initializeSchema() {
 
   if (tables.length > 0) {
     console.log('Database schema already initialized');
+    // Run migration for existing databases
+    migrateSchema();
     return;
   }
 
@@ -128,7 +164,7 @@ function initializeSchema() {
     CREATE TABLE IF NOT EXISTS sessions (
       id TEXT PRIMARY KEY,
       admin_id INTEGER NOT NULL,
-      refresh_token TEXT UNIQUE NOT NULL,
+      csrf_token TEXT NOT NULL,
       expires_at TIMESTAMP NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY(admin_id) REFERENCES admins(id) ON DELETE CASCADE
@@ -162,6 +198,22 @@ function initializeSchema() {
   `);
 
   console.log('Database schema initialized successfully');
+}
+
+/**
+ * Clean up expired sessions
+ * Runs on startup and periodically
+ */
+function cleanupExpiredSessions() {
+  try {
+    const now = new Date().toISOString();
+    const result = db.prepare('DELETE FROM sessions WHERE expires_at < ?').run(now);
+    if (result.changes > 0) {
+      console.log(`🧹 Cleaned up ${result.changes} expired session(s)`);
+    }
+  } catch (error) {
+    console.warn('⚠️  Error cleaning up expired sessions:', error.message);
+  }
 }
 
 /**
@@ -208,6 +260,7 @@ function seedDefaultAdmin() {
 
 // Initialize on import
 initializeSchema();
+cleanupExpiredSessions();
 seedDefaultAdmin();
 
 export { db };

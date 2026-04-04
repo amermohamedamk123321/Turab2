@@ -1,10 +1,24 @@
+import crypto from 'crypto';
 import bcryptjs from 'bcryptjs';
 import { db } from '../config/database.js';
-import { generateAccessToken, generateRefreshToken, generateSessionId } from '../utils/tokenUtils.js';
 import { AppError, asyncHandler } from '../middleware/errorHandler.js';
 
 /**
- * Login admin user
+ * Generate a random session ID
+ */
+function generateSessionId() {
+  return crypto.randomBytes(32).toString('hex');
+}
+
+/**
+ * Generate a CSRF token
+ */
+function generateCsrfToken() {
+  return crypto.randomBytes(32).toString('hex');
+}
+
+/**
+ * Login admin user - Session-based authentication
  * POST /api/auth/login
  */
 export const login = asyncHandler(async (req, res) => {
@@ -14,134 +28,130 @@ export const login = asyncHandler(async (req, res) => {
   const admin = db.prepare('SELECT * FROM admins WHERE email = ?').get(email);
 
   if (!admin) {
+    // Log failed attempt without exposing admin existence
+    console.warn(`[AUTH] Failed login attempt for email: ${email}`);
     throw new AppError('Invalid email or password', 401);
   }
 
-  // Verify password
+  // Verify password using bcrypt
   const isPasswordValid = await bcryptjs.compare(password, admin.password_hash);
 
   if (!isPasswordValid) {
+    // Log failed attempt without storing password
+    console.warn(`[AUTH] Failed login attempt for email: ${email} (invalid password)`);
     throw new AppError('Invalid email or password', 401);
   }
 
-  // Generate tokens
-  const accessToken = generateAccessToken(admin.id, admin.email);
-  const refreshToken = generateRefreshToken(admin.id);
+  // Verify admin role
+  if (admin.role !== 'admin') {
+    console.warn(`[AUTH] Login attempt with non-admin role for email: ${email}`);
+    throw new AppError('Invalid email or password', 401);
+  }
+
+  // Create secure session
   const sessionId = generateSessionId();
+  const csrfToken = generateCsrfToken();
+  const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
-  // Store refresh token in database
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+  // Store session in database
   db.prepare(`
-    INSERT INTO sessions (id, admin_id, refresh_token, expires_at)
+    INSERT INTO sessions (id, admin_id, csrf_token, expires_at)
     VALUES (?, ?, ?, ?)
-  `).run(sessionId, admin.id, refreshToken, expiresAt.toISOString());
+  `).run(sessionId, admin.id, csrfToken, expiresAt.toISOString());
 
-  // Log audit event
+  // Log successful login
   db.prepare(`
     INSERT INTO audit_logs (admin_id, action, resource_type)
     VALUES (?, ?, ?)
   `).run(admin.id, 'LOGIN', 'AUTH');
 
-  res.json({
+  // Set secure HTTP-only session cookie
+  res.cookie('sessionId', sessionId, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    path: '/',
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+  });
+
+  // Return admin data and CSRF token (no session ID or tokens in body)
+  res.status(200).json({
     success: true,
     message: 'Login successful',
     data: {
-      accessToken,
-      refreshToken,
       admin: {
         id: admin.id,
         username: admin.username,
         email: admin.email,
       },
+      csrfToken,
     },
   });
 });
 
 /**
- * Refresh access token
- * POST /api/auth/refresh
- */
-export const refresh = asyncHandler(async (req, res) => {
-  const { refreshToken } = req.body;
-
-  if (!refreshToken) {
-    throw new AppError('Refresh token is required', 400);
-  }
-
-  // Find session with refresh token
-  const session = db.prepare('SELECT * FROM sessions WHERE refresh_token = ?').get(refreshToken);
-
-  if (!session) {
-    throw new AppError('Invalid refresh token', 401);
-  }
-
-  // Check if session is expired
-  if (new Date(session.expires_at) < new Date()) {
-    db.prepare('DELETE FROM sessions WHERE id = ?').run(session.id);
-    throw new AppError('Refresh token has expired', 401);
-  }
-
-  // Get admin info
-  const admin = db.prepare('SELECT * FROM admins WHERE id = ?').get(session.admin_id);
-
-  if (!admin) {
-    throw new AppError('Admin not found', 404);
-  }
-
-  // Generate new access token
-  const newAccessToken = generateAccessToken(admin.id, admin.email);
-
-  res.json({
-    success: true,
-    message: 'Token refreshed',
-    data: {
-      accessToken: newAccessToken,
-    },
-  });
-});
-
-/**
- * Logout admin user
- * POST /api/auth/logout
- */
-export const logout = asyncHandler(async (req, res) => {
-  const { refreshToken } = req.body;
-
-  // Require authentication
-  if (!req.user) {
-    throw new AppError('Authentication required', 401);
-  }
-
-  if (refreshToken) {
-    // Delete session from database
-    db.prepare('DELETE FROM sessions WHERE refresh_token = ?').run(refreshToken);
-  }
-
-  // Log audit event
-  db.prepare(`
-    INSERT INTO audit_logs (admin_id, action, resource_type)
-    VALUES (?, ?, ?)
-  `).run(req.user.id, 'LOGOUT', 'AUTH');
-
-  res.json({
-    success: true,
-    message: 'Logout successful',
-  });
-});
-
-/**
- * Get current session info
+ * Get current session info - Validates session and returns fresh CSRF token
  * GET /api/auth/me
  */
 export const getMe = asyncHandler(async (req, res) => {
-  const admin = db.prepare('SELECT id, username, email, created_at FROM admins WHERE id = ?').get(req.user.id);
-
-  if (!admin) {
-    throw new AppError('Admin not found', 404);
+  // req.user and req.sessionId are set by sessionAuth middleware
+  if (!req.user || !req.sessionId) {
+    throw new AppError('Unauthorized', 401);
   }
 
-  res.json({
+  // Get fresh CSRF token
+  const csrfToken = generateCsrfToken();
+
+  // Update session with new CSRF token
+  db.prepare(`
+    UPDATE sessions SET csrf_token = ? WHERE id = ?
+  `).run(csrfToken, req.sessionId);
+
+  // Return admin data
+  res.status(200).json({
     success: true,
-    data: admin,
+    data: {
+      admin: {
+        id: req.user.id,
+        username: req.user.username,
+        email: req.user.email,
+      },
+      csrfToken,
+    },
+  });
+});
+
+/**
+ * Logout admin user - Destroys session
+ * POST /api/auth/logout
+ */
+export const logout = asyncHandler(async (req, res) => {
+  // req.sessionId is set by sessionAuth middleware
+  if (!req.sessionId) {
+    throw new AppError('Unauthorized', 401);
+  }
+
+  // Log logout event
+  if (req.user) {
+    db.prepare(`
+      INSERT INTO audit_logs (admin_id, action, resource_type)
+      VALUES (?, ?, ?)
+    `).run(req.user.id, 'LOGOUT', 'AUTH');
+  }
+
+  // Delete session from database
+  db.prepare('DELETE FROM sessions WHERE id = ?').run(req.sessionId);
+
+  // Clear session cookie
+  res.clearCookie('sessionId', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    path: '/',
+  });
+
+  res.status(200).json({
+    success: true,
+    message: 'Logout successful',
   });
 });

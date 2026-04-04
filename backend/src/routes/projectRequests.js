@@ -5,7 +5,8 @@ import {
   createProjectRequest,
   deleteProjectRequest,
 } from '../controllers/projectRequestController.js';
-import { requireAuth, requireAdmin } from '../middleware/auth.js';
+import { sessionAuth } from '../middleware/sessionAuth.js';
+import { validateCsrfToken } from '../middleware/csrf.js';
 import {
   validateProjectRequestCreate,
   handleValidationErrors,
@@ -17,13 +18,13 @@ const router = express.Router();
  * List all project requests (admin only)
  * GET /api/project-requests
  */
-router.get('/', requireAuth(), requireAdmin, listProjectRequests);
+router.get('/', sessionAuth, listProjectRequests);
 
 /**
  * Get single project request (admin only)
  * GET /api/project-requests/:id
  */
-router.get('/:id', requireAuth(), requireAdmin, getProjectRequest);
+router.get('/:id', sessionAuth, getProjectRequest);
 
 /**
  * Create project request (public)
@@ -40,6 +41,6 @@ router.post(
  * Delete project request (admin only)
  * DELETE /api/project-requests/:id
  */
-router.delete('/:id', requireAuth(), requireAdmin, deleteProjectRequest);
+router.delete('/:id', sessionAuth, validateCsrfToken, deleteProjectRequest);
 
 export default router;

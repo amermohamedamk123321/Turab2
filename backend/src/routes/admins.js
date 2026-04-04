@@ -6,7 +6,8 @@ import {
   updateAdmin,
   deleteAdmin,
 } from '../controllers/adminController.js';
-import { requireAuth, requireAdmin } from '../middleware/auth.js';
+import { sessionAuth } from '../middleware/sessionAuth.js';
+import { validateCsrfToken } from '../middleware/csrf.js';
 import {
   validateAdminCreate,
   validateAdminUpdate,
@@ -15,9 +16,8 @@ import {
 
 const router = express.Router();
 
-// All admin routes require authentication and admin role
-router.use(requireAuth());
-router.use(requireAdmin);
+// All admin routes require authentication and session validation
+router.use(sessionAuth);
 
 /**
  * List all admins
@@ -35,18 +35,18 @@ router.get('/:id', getAdmin);
  * Create admin
  * POST /api/admins
  */
-router.post('/', validateAdminCreate, handleValidationErrors, createAdmin);
+router.post('/', validateCsrfToken, validateAdminCreate, handleValidationErrors, createAdmin);
 
 /**
  * Update admin
  * PUT /api/admins/:id
  */
-router.put('/:id', validateAdminUpdate, handleValidationErrors, updateAdmin);
+router.put('/:id', validateCsrfToken, validateAdminUpdate, handleValidationErrors, updateAdmin);
 
 /**
  * Delete admin
  * DELETE /api/admins/:id
  */
-router.delete('/:id', deleteAdmin);
+router.delete('/:id', validateCsrfToken, deleteAdmin);
 
 export default router;

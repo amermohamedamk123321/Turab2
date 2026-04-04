@@ -1,23 +1,22 @@
 /**
  * HTTP API Service Layer
- * Connects to Express.js backend with fallback to localStorage
- * All functions return promises
+ * Session-based authentication with HTTP-only cookies
+ * CSRF protection for state-changing operations
  */
 import { contactSchema, loginSchema, adminCreateSchema, adminUpdateSchema, projectSchema, projectRequestSchema } from "@/lib/validation";
 
 // Get API base URL from environment
-// For local development: use relative path (proxied through Vite)
-// For production: use absolute URL
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
-// Track if we're in fallback mode (backend not available)
+// Track if backend is available
 let USE_FALLBACK = false;
 let FALLBACK_CHECKED = false;
 
-// Storage key for tokens
+// In-memory CSRF token storage (secure - not in localStorage)
+let csrfToken = null;
+
+// Storage key for fallback data only
 const STORAGE_KEYS = {
-  ACCESS_TOKEN: 'turab_access_token',
-  REFRESH_TOKEN: 'turab_refresh_token',
   PROJECTS: 'turab_fallback_projects',
   MESSAGES: 'turab_fallback_messages',
   PROJECT_REQUESTS: 'turab_fallback_requests',
@@ -111,7 +110,6 @@ const seedFallbackData = () => {
   }
 };
 
-// Seed fallback data on module load
 seedFallbackData();
 
 /**
@@ -147,26 +145,13 @@ const checkBackendAvailability = async () => {
     console.log('🔍 [Health Check] Response status:', response.status);
     console.log('🔍 [Health Check] Response ok:', response.ok);
 
-    let responseData;
-    try {
-      responseData = await response.text();
-      console.log('🔍 [Health Check] Response body:', responseData);
-    } catch (e) {
-      console.warn('⚠️  [Health Check] Could not read response body');
-    }
-
     if (response.ok) {
       USE_FALLBACK = false;
       console.log('✅ [Health Check] Backend is available!');
       return false;
-    } else {
-      console.warn('⚠️  [Health Check] Backend health check returned status:', response.status);
     }
   } catch (error) {
     console.error('❌ [Health Check] Error:', error.name, '-', error.message);
-    if (error.name === 'AbortError') {
-      console.error('❌ [Health Check] Request was aborted (timeout)');
-    }
   }
 
   USE_FALLBACK = true;
@@ -175,7 +160,7 @@ const checkBackendAvailability = async () => {
 };
 
 /**
- * Make HTTP request with automatic fallback to localStorage
+ * Make HTTP request with CSRF token and session cookies
  */
 const apiRequest = async (endpoint, options = {}) => {
   // Check backend availability
@@ -184,10 +169,8 @@ const apiRequest = async (endpoint, options = {}) => {
     await checkBackendAvailability();
   }
 
-  // If backend is not available, throw error (will be handled by individual APIs)
   if (USE_FALLBACK) {
-    console.error('❌ [API] Backend unavailable - USE_FALLBACK is true');
-    console.error('❌ [API] FALLBACK_CHECKED:', FALLBACK_CHECKED);
+    console.error('❌ [API] Backend unavailable');
     throw new Error('BACKEND_UNAVAILABLE');
   }
 
@@ -199,10 +182,10 @@ const apiRequest = async (endpoint, options = {}) => {
     ...options.headers,
   };
 
-  // Add auth token if available
-  const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
-  if (accessToken) {
-    headers['Authorization'] = `Bearer ${accessToken}`;
+  // Add CSRF token to state-changing requests
+  const method = options.method?.toUpperCase() || 'GET';
+  if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method) && csrfToken) {
+    headers['X-CSRF-Token'] = csrfToken;
   }
 
   try {
@@ -211,47 +194,13 @@ const apiRequest = async (endpoint, options = {}) => {
 
     const response = await fetch(url, {
       ...options,
+      method,
       headers,
       signal: controller.signal,
+      credentials: 'include', // Include cookies (session)
     });
 
     clearTimeout(timeout);
-
-    // Handle 401 - token expired, try to refresh
-    if (response.status === 401 && accessToken) {
-      const refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
-      if (refreshToken) {
-        try {
-          const refreshResponse = await fetch(`${API_BASE_URL}/auth/refresh`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ refreshToken }),
-          });
-
-          if (refreshResponse.ok) {
-            const data = await refreshResponse.json();
-            localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, data.data.accessToken);
-
-            // Retry original request with new token
-            headers['Authorization'] = `Bearer ${data.data.accessToken}`;
-            return fetch(url, {
-              ...options,
-              headers,
-            }).then(res => handleResponse(res));
-          } else {
-            localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-            localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-            window.location.href = '/';
-          }
-        } catch (error) {
-          console.error('Token refresh failed:', error);
-          localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-          localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-          window.location.href = '/';
-        }
-      }
-    }
-
     return handleResponse(response);
   } catch (error) {
     console.error('API request failed:', error);
@@ -260,7 +209,7 @@ const apiRequest = async (endpoint, options = {}) => {
 };
 
 /**
- * Handle API response
+ * Handle API response and extract CSRF token if available
  */
 const handleResponse = async (response) => {
   let data;
@@ -270,8 +219,21 @@ const handleResponse = async (response) => {
     data = {};
   }
 
+  // Extract new CSRF token from response if available
+  if (data.data?.csrfToken) {
+    csrfToken = data.data.csrfToken;
+    console.log('🔐 [API] Updated CSRF token');
+  }
+
   if (!response.ok) {
     const message = data.message || `HTTP Error: ${response.status}`;
+    
+    // Handle 401 Unauthorized - session expired or invalid
+    if (response.status === 401) {
+      csrfToken = null;
+      console.warn('⚠️  [API] Session expired or invalid');
+    }
+    
     throw new Error(message);
   }
 
@@ -293,10 +255,13 @@ export const authApi = {
 
       console.log('✅ Login successful');
 
-      // Store tokens
-      localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, response.data.accessToken);
-      localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, response.data.refreshToken);
+      // Extract and store CSRF token from response
+      if (response.data?.csrfToken) {
+        csrfToken = response.data.csrfToken;
+      }
 
+      // Session cookie is set automatically by browser (HttpOnly)
+      // No tokens stored in localStorage
       return response.data.admin;
     } catch (error) {
       console.error('❌ Login failed:', error.message);
@@ -305,37 +270,46 @@ export const authApi = {
   },
 
   logout: async () => {
-    const refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
     try {
+      // Send CSRF token with logout request
       await apiRequest('/auth/logout', {
         method: 'POST',
-        body: JSON.stringify({ refreshToken }),
+        body: JSON.stringify({ csrfToken }),
       });
     } catch (error) {
       console.error('Logout failed:', error);
     }
 
-    localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-    localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+    // Clear CSRF token
+    csrfToken = null;
+    // Cookie is cleared by server
   },
 
-  getSession: () => {
-    const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
-    if (!accessToken) return null;
-
+  getSession: async () => {
     try {
-      // Decode token to get user info (without verification)
-      const parts = accessToken.split('.');
-      if (parts.length !== 3) return null;
+      console.log('🔍 [Auth] Checking session...');
+      const response = await apiRequest('/auth/me', {
+        method: 'GET',
+      });
 
-      const decoded = JSON.parse(atob(parts[1]));
-      return {
-        id: decoded.id,
-        email: decoded.email,
-      };
-    } catch {
+      console.log('✅ [Auth] Session valid');
+
+      // Extract CSRF token
+      if (response.data?.csrfToken) {
+        csrfToken = response.data.csrfToken;
+      }
+
+      return response.data.admin;
+    } catch (error) {
+      console.warn('⚠️  [Auth] No valid session:', error.message);
+      csrfToken = null;
       return null;
     }
+  },
+
+  getCsrfToken: () => csrfToken,
+  setCsrfToken: (token) => {
+    csrfToken = token;
   },
 };
 
@@ -374,6 +348,7 @@ export const projectsApi = {
       solution: project.solution,
       result: project.result,
       metric: project.metric,
+      csrfToken,
     };
 
     const response = await apiRequest('/projects', {
@@ -381,12 +356,11 @@ export const projectsApi = {
       body: JSON.stringify(data),
     });
 
-    // Map backend response to frontend format
     return mapProjectResponse(response.data);
   },
 
   update: async (id, data) => {
-    const updateData = {};
+    const updateData = { csrfToken };
     if (data.title !== undefined) updateData.title = data.title;
     if (data.description !== undefined) updateData.description = data.description;
     if (data.status !== undefined) updateData.status = data.status;
@@ -412,6 +386,7 @@ export const projectsApi = {
   delete: async (id) => {
     await apiRequest(`/projects/${id}`, {
       method: 'DELETE',
+      body: JSON.stringify({ csrfToken }),
     });
     return true;
   },
@@ -438,7 +413,7 @@ const mapProjectResponse = (project) => {
     result: project.result,
     metric: project.metric,
     createdAt: project.created_at,
-    images: [], // Gallery images not used with YouTube thumbnails
+    images: [],
   };
 };
 
@@ -470,6 +445,7 @@ export const messagesApi = {
   markRead: async (id) => {
     const response = await apiRequest(`/messages/${id}/read`, {
       method: 'PATCH',
+      body: JSON.stringify({ csrfToken }),
     });
     return response.data;
   },
@@ -477,6 +453,7 @@ export const messagesApi = {
   delete: async (id) => {
     await apiRequest(`/messages/${id}`, {
       method: 'DELETE',
+      body: JSON.stringify({ csrfToken }),
     });
     return true;
   },
@@ -495,14 +472,14 @@ export const adminsApi = {
 
     const response = await apiRequest('/admins', {
       method: 'POST',
-      body: JSON.stringify({ username, email, password }),
+      body: JSON.stringify({ username, email, password, csrfToken }),
     });
 
     return response.data;
   },
 
   update: async (id, { username, email, password }) => {
-    const data = {};
+    const data = { csrfToken };
     if (username !== undefined) data.username = username;
     if (email !== undefined) data.email = email;
     if (password !== undefined) data.password = password;
@@ -518,6 +495,7 @@ export const adminsApi = {
   delete: async (id) => {
     await apiRequest(`/admins/${id}`, {
       method: 'DELETE',
+      body: JSON.stringify({ csrfToken }),
     });
     return true;
   },
@@ -535,14 +513,14 @@ export const socialLinksApi = {
       // Update existing
       const response = await apiRequest(`/social-links/${id}`, {
         method: 'PUT',
-        body: JSON.stringify({ platform, url, enabled }),
+        body: JSON.stringify({ platform, url, enabled, csrfToken }),
       });
       return response.data;
     } else {
       // Create new
       const response = await apiRequest('/social-links', {
         method: 'POST',
-        body: JSON.stringify({ platform, url, enabled }),
+        body: JSON.stringify({ platform, url, enabled, csrfToken }),
       });
       return response.data;
     }
@@ -551,6 +529,7 @@ export const socialLinksApi = {
   delete: async (id) => {
     await apiRequest(`/social-links/${id}`, {
       method: 'DELETE',
+      body: JSON.stringify({ csrfToken }),
     });
     return true;
   },
@@ -591,6 +570,7 @@ export const projectRequestsApi = {
   delete: async (id) => {
     await apiRequest(`/project-requests/${id}`, {
       method: 'DELETE',
+      body: JSON.stringify({ csrfToken }),
     });
     return true;
   },

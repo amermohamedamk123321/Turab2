@@ -13,25 +13,49 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Initialize session on mount
   useEffect(() => {
-    try {
-      const session = authApi.getSession();
-      if (session) setUser(session);
-    } catch (e) {
-      console.error("Auth session error:", e);
-    }
-    setLoading(false);
+    const initializeSession = async () => {
+      try {
+        // Check if valid session exists via API call
+        const session = await authApi.getSession();
+        if (session) {
+          console.log('✅ Session restored from server');
+          setUser(session);
+        } else {
+          console.log('❌ No valid session found');
+          setUser(null);
+        }
+      } catch (error) {
+        console.warn('Session validation failed:', error.message);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initializeSession();
   }, []);
 
   const login = useCallback(async (email, password) => {
-    const userData = await authApi.login(email, password);
-    setUser(userData);
-    return userData;
+    try {
+      const userData = await authApi.login(email, password);
+      setUser(userData);
+      return userData;
+    } catch (error) {
+      setUser(null);
+      throw error;
+    }
   }, []);
 
-  const logout = useCallback(() => {
-    authApi.logout();
-    setUser(null);
+  const logout = useCallback(async () => {
+    try {
+      await authApi.logout();
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setUser(null);
+    }
   }, []);
 
   return (

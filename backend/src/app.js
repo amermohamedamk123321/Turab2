@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
+import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -28,11 +29,33 @@ import socialLinkRoutes from './routes/socialLinks.js';
 const app = express();
 
 // ===== SECURITY MIDDLEWARE =====
-// Helmet for HTTP security headers
-app.use(helmet());
+// Helmet for HTTP security headers with recommended defaults
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", "data:", "https:"],
+      fontSrc: ["'self'"],
+      connectSrc: ["'self'"],
+    },
+  },
+  frameguard: { action: 'deny' },
+  noSniff: true,
+  xssFilter: true,
+  hsts: {
+    maxAge: 31536000, // 1 year
+    includeSubDomains: true,
+    preload: false, // Set to true only if your domain is on the HSTS preload list
+  },
+}));
 
 // CORS configuration
 app.use(cors(corsOptions));
+
+// Cookie parser middleware
+app.use(cookieParser());
 
 // Body parser middleware with size limits
 app.use(express.json({ limit: '10mb' }));

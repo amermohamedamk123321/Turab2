@@ -30,8 +30,8 @@ export const corsOptions = {
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true, // Allow credentials (cookies, authorization headers)
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
+  credentials: true, // Allow credentials (cookies, authorization headers, session cookies)
   optionsSuccessStatus: 200, // For legacy browsers
   maxAge: 86400, // Cache preflight for 24 hours
 };
