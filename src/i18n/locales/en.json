@@ -23,11 +23,11 @@
   "services": {
     "title": "Our",
     "titleHighlight": "Services",
-    "subtitle": "We offer comprehensive digital solutions to help your business thrive in the digital age",
+    "subtitle": "We offer comprehensive digital solutions to help your business thrive in the new digital age",
     "security": {
       "category": "Cyber Security",
       "title": "Security Protection",
-      "description": "Comprehensive cybersecurity solutions to protect your business from threats. We provide advanced threat detection, vulnerability assessments, and 24/7 monitoring to keep your data safe and secure."
+      "description": "Comprehensive cyber security solutions to protect your business from threats. We provide advanced threat detection, vulnerability assessments, and yearly updates to keep your data safe and secure."
     },
     "software": {
       "category": "IT Support",
@@ -37,15 +37,15 @@
     "web": {
       "category": "Development",
       "title": "Website & Application Services",
-      "description": "Custom web and application development tailored to your business needs. From responsive websites to powerful mobile apps, we build digital solutions that drive growth and engage your audience."
+      "description": "Custom website and application development tailored to your business needs. From dynamic websites to powerful mobile apps, we build digital solutions that drive growth and engage your audience."
     },
     "desktop": {
       "category": "Enterprise Solutions",
       "title": "Desktop Systems with Admin Dashboard",
-      "description": "Powerful desktop applications and administrative dashboards designed for enterprise needs. We create robust, scalable systems with intuitive interfaces for managing complex business operations and real-time analytics."
+      "description": "Powerful desktop applications and administrative dashboards designed for enterprise needs. We create robust, scalable systems with intuitive interfaces and AI for managing complex business operations and real-time analytics."
     },
     "learnMore": "Learn More",
-    "readyToTransform": "Ready to transform your digital presence?",
+    "readyToTransform": "Ready to build your digital presence?",
     "startToday": "Start Your Project Today"
   },
   "featured": {
@@ -57,7 +57,7 @@
   },
   "testimonials": {
     "title": "What Our",
-    "titleHighlight": "Clients Say",
+    "titleHighlight": "Clients experiences and opinions",
     "subtitle": "Don't just take our word for it. Here's what our clients have to say about working with us.",
     "clientSatisfaction": "Client Satisfaction",
     "projectsCompleted": "Projects Completed",
@@ -98,7 +98,7 @@
     "mission": {
       "title": "Our",
       "titleHighlight": "Mission",
-      "description": "To empower businesses with cutting-edge digital solutions that not only meet today's challenges but anticipate tomorrow's opportunities. We believe that great technology should be invisible, intuitive, and transformative.",
+      "description": "To empower businesses with cutting-edge digital solutions that not only meet today's challenges but anticipate tomorrow's opportunities. We believe that great technology should be robust, intuitive, and transformative.",
       "projectsDelivered": "Projects Delivered",
       "clientSatisfaction": "Client Satisfaction",
       "supportAvailable": "Support Available"
@@ -106,25 +106,25 @@
     "team": {
       "title": "Meet Our",
       "titleHighlight": "Team",
-      "subtitle": "The talented individuals behind every successful project"
+      "subtitle": "The talented programmers and cyber security experts behind every successful project"
     },
     "timeline": {
       "title": "Our",
       "titleHighlight": "Journey",
-      "subtitle": "Key milestones that shaped our growth and success",
+      "subtitle": "The time when we started becomming high level programmers and cyber security experts",
       "founded": "Company Founded",
-      "foundedDesc": "Started with a vision to transform digital experiences",
-      "projects": "50+ Projects Delivered",
-      "projectsDesc": "Reached major milestone in client satisfaction and project delivery",
+      "foundedDesc": "Started with a vision to transform digital experiences of Afghanistan and the world",
+      "projects": "20+ Projects Delivered",
+      "projectsDesc": "Earning client satisfaction and project delivery to the biggest businesses in Afghanistan",
       "recognition": "Industry Recognition",
-      "recognitionDesc": "Awarded Best Digital Agency by Tech Innovation Awards"
+      "recognitionDesc": "Turab Root has become one of the best digital companies in Afghanistan"
     },
     "values": {
       "title": "Our",
       "titleHighlight": "Values",
-      "subtitle": "The principles that guide everything we do",
+      "subtitle": "The principles we stand for",
       "innovation": "Innovation",
-      "innovationDesc": "We embrace cutting-edge technologies and creative solutions to deliver exceptional results.",
+      "innovationDesc": "We embrace cutting-edge technologies and creative solutions to deliver exceptional results for our clients.",
       "collaboration": "Collaboration",
       "collaborationDesc": "We believe in transparent communication and working closely with our clients as partners.",
       "qualitySupport": "Quality & Support",
@@ -133,7 +133,7 @@
     "workWithUs": {
       "title": "Work With",
       "titleHighlight": "Us",
-      "description": "We're always excited to work on new projects and help bring innovative ideas to life. Whether you're a startup with a bold vision or an established company looking to modernize, we'd love to hear from you.",
+      "description": "We're always excited to work on new projects and help bring innovative ideas to life. Whether you're a startup with a bold vision or an established company looking to modernize, we'd love to work with you.",
       "officeHours": "Office Hours",
       "monFri": "Monday - Friday: 9AM - 6PM",
       "sat": "Saturday: 10AM - 2PM",
@@ -229,17 +229,17 @@
       "title": "Frequently Asked",
       "titleHighlight": "Questions",
       "q1": "How long does a typical project take?",
-      "a1": "Project timelines vary based on scope and complexity. Simple websites typically take 4-6 weeks, while complex applications can take 3-6 months. We'll provide a detailed timeline during consultation.",
+      "a1": "Project timelines vary based on scope and complexity. Simple websites typically take 4-6 weeks, while complex applications can take 1-2 months. We'll provide a detailed timeline during consultation.",
       "q2": "Do you offer ongoing support?",
-      "a2": "Yes! We provide comprehensive maintenance packages including updates, security monitoring, and technical support to keep your project running smoothly.",
-      "q3": "Can you work with our existing team?",
-      "a3": "Absolutely! We love collaborating with in-house teams and can integrate seamlessly with your existing development processes and tools.",
+      "a2": "Yes! We provide comprehensive maintenance packages including updates, security support, and technical support to keep your project running smoothly.",
+      "q3": "Can you build AI?",
+      "a3": "Absolutely! We can make AI features inside your systems, applications and websites. Not only useful features but also scam and threat detections can be installed by our team.",
       "q4": "What's included in the consultation?",
       "a4": "Our free consultation includes project scope analysis, technology recommendations, timeline estimates, and a detailed proposal with transparent pricing.",
       "q5": "Do you work with startups?",
       "a5": "Yes! We love working with startups and understand the unique challenges they face. We offer flexible payment options and scalable solutions that grow with your business.",
       "q6": "What technologies do you use?",
-      "a6": "We use modern, proven technologies including React, Node.js, Python, and cloud platforms. We choose the best tech stack for each project's specific needs."
+      "a6": "We use modern, proven technologies including React, Node.js, Python, Django, Java script, Flutter, C++ and more. We choose the best tech stack for each project's specific needs."
     }
   },
   "dashboard": {
@@ -325,7 +325,7 @@
     "successDesc": "Welcome back to admin dashboard",
     "errorTitle": "Login failed",
     "errorDesc": "Invalid credentials. Please try again.",
-    "defaultCreds": "Default: admin@turabroot.com / admin123"
+    "defaultCreds": "."
   },
   "footer": {
     "ictService": "ICT Service",
