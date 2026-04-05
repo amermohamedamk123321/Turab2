@@ -116,13 +116,13 @@ const Footer = () => {
               <div>
                 <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">Contact</h4>
                 <div className="flex flex-col gap-3">
-                  <a href="tel:+931234567890" className="text-sm text-foreground/60 hover:text-primary transition-colors flex items-center gap-2.5">
+                  <a href="tel:+93767101001" className="text-sm text-foreground/60 hover:text-primary transition-colors flex items-center gap-2.5" dir="ltr">
                     <Phone className="h-4 w-4 text-primary/70" />
-                    +93 123 456 7890
+                    +93 767 101 001
                   </a>
-                  <a href="mailto:info@turabroot.com" className="text-sm text-foreground/60 hover:text-primary transition-colors flex items-center gap-2.5">
+                  <a href="mailto:turabacademy96@gmail.com" className="text-sm text-foreground/60 hover:text-primary transition-colors flex items-center gap-2.5" dir="ltr">
                     <Mail className="h-4 w-4 text-primary/70" />
-                    info@turabroot.com
+                    turabacademy96@gmail.com
                   </a>
                   <span className="text-sm text-foreground/60 flex items-center gap-2.5">
                     <MapPin className="h-4 w-4 text-primary/70" />
