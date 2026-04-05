@@ -9,9 +9,9 @@ const Timeline = () => {
   const { t } = useTranslation();
 
   const milestones = [
-    { year: "2020", title: t("about.timeline.founded"), description: t("about.timeline.foundedDesc"), icon: CheckCircle, color: "text-blue-500" },
-    { year: "2022", title: t("about.timeline.projects"), description: t("about.timeline.projectsDesc"), icon: Users, color: "text-green-500" },
-    { year: "2024", title: t("about.timeline.recognition"), description: t("about.timeline.recognitionDesc"), icon: Award, color: "text-yellow-500" }
+    { year: "2022", title: t("about.timeline.founded"), description: t("about.timeline.foundedDesc"), icon: CheckCircle, color: "text-blue-500" },
+    { year: "2025", title: t("about.timeline.projects"), description: t("about.timeline.projectsDesc"), icon: Users, color: "text-green-500" },
+    { year: "2026", title: t("about.timeline.recognition"), description: t("about.timeline.recognitionDesc"), icon: Award, color: "text-yellow-500" }
   ];
 
   return (
