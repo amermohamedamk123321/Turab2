@@ -78,14 +78,6 @@ const About = () => {
               <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-5 sm:mb-6">{t("about.workWithUs.description")}</p>
               <div className="flex justify-center items-center">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 text-xs sm:text-sm text-muted-foreground mx-auto">
-                  <div>
-                    <div className="font-bold text-foreground mb-1">{t("about.workWithUs.officeHours")}</div>
-                    <div>{t("about.workWithUs.monFri")}</div>
-                  </div>
-                  <div>
-                    <div className="font-bold text-foreground mb-1">{t("about.workWithUs.responseTime")}</div>
-                    <div>{t("about.workWithUs.initialConsultation")}</div>
-                  </div>
                 </div>
               </div>
             </GlassCard>
