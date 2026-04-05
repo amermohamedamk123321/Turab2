@@ -23,6 +23,7 @@ function generateCsrfToken() {
  */
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+  console.log(`🔐 [LOGIN] Attempt for email: ${email}`);
 
   // Find admin by email
   const admin = db.prepare('SELECT * FROM admins WHERE email = ?').get(email);

@@ -8,9 +8,9 @@ import { contactSchema, loginSchema, adminCreateSchema, adminUpdateSchema, proje
 // Get API base URL from environment
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
-// Track if backend is available
+// Track backend availability status
+// Default to false (assume backend is available)
 let USE_FALLBACK = false;
-let FALLBACK_CHECKED = false;
 
 // In-memory CSRF token storage (secure - not in localStorage)
 let csrfToken = null;
@@ -112,68 +112,11 @@ const seedFallbackData = () => {
 
 seedFallbackData();
 
-/**
- * Check if backend is available (runs once)
- */
-const checkBackendAvailability = async () => {
-  if (FALLBACK_CHECKED) return USE_FALLBACK;
-
-  FALLBACK_CHECKED = true;
-
-  console.log('🔍 [Health Check] Starting backend availability check...');
-  console.log('🔍 [Health Check] API_BASE_URL:', API_BASE_URL);
-
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => {
-      console.warn('⚠️  [Health Check] Request timeout after 5 seconds');
-      controller.abort();
-    }, 5000);
-
-    const healthUrl = `${API_BASE_URL}/health`;
-    console.log('🔍 [Health Check] Fetching:', healthUrl);
-
-    const response = await fetch(healthUrl, {
-      signal: controller.signal,
-      headers: {
-        'Accept': 'application/json',
-      }
-    });
-
-    clearTimeout(timeout);
-
-    console.log('🔍 [Health Check] Response status:', response.status);
-    console.log('🔍 [Health Check] Response ok:', response.ok);
-
-    if (response.ok) {
-      USE_FALLBACK = false;
-      console.log('✅ [Health Check] Backend is available!');
-      return false;
-    }
-  } catch (error) {
-    console.error('❌ [Health Check] Error:', error.name, '-', error.message);
-  }
-
-  USE_FALLBACK = true;
-  console.warn('⚠️  [Health Check] Switched to fallback mode - using cached data');
-  return true;
-};
 
 /**
  * Make HTTP request with CSRF token and session cookies
  */
 const apiRequest = async (endpoint, options = {}) => {
-  // Check backend availability
-  if (!FALLBACK_CHECKED) {
-    console.log('🔍 [API] First request - checking backend availability...');
-    await checkBackendAvailability();
-  }
-
-  if (USE_FALLBACK) {
-    console.error('❌ [API] Backend unavailable');
-    throw new Error('BACKEND_UNAVAILABLE');
-  }
-
   console.log('🔍 [API] Making request to:', endpoint);
 
   const url = `${API_BASE_URL}${endpoint}`;

@@ -30,8 +30,15 @@ const app = express();
 
 // ===== SECURITY MIDDLEWARE =====
 // Helmet for HTTP security headers with recommended defaults
-app.use(helmet({
-  contentSecurityPolicy: {
+const helmetConfig = {
+  frameguard: { action: 'deny' },
+  noSniff: true,
+  xssFilter: true,
+};
+
+// Only enable CSP in production
+if (process.env.NODE_ENV === 'production') {
+  helmetConfig.contentSecurityPolicy = {
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'"],
@@ -40,16 +47,15 @@ app.use(helmet({
       fontSrc: ["'self'"],
       connectSrc: ["'self'"],
     },
-  },
-  frameguard: { action: 'deny' },
-  noSniff: true,
-  xssFilter: true,
-  hsts: {
+  };
+  helmetConfig.hsts = {
     maxAge: 31536000, // 1 year
     includeSubDomains: true,
-    preload: false, // Set to true only if your domain is on the HSTS preload list
-  },
-}));
+    preload: false,
+  };
+}
+
+app.use(helmet(helmetConfig));
 
 // CORS configuration
 app.use(cors(corsOptions));
@@ -62,13 +68,12 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // ===== HEALTH CHECK (before rate limiting) =====
-const healthResponse = (req, res) => {
-  const response = { status: 'ok', timestamp: new Date().toISOString() };
-  console.log('🏥 [Health] Health check request received');
-  res.json(response);
-};
-app.get('/health', healthResponse);
-app.get('/api/health', healthResponse);
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
 
 // ===== RATE LIMITING =====
 // Global rate limiter
