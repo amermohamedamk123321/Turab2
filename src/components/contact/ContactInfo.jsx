@@ -8,8 +8,8 @@ const ContactInfo = () => {
   const { t } = useTranslation();
 
   const contactInfo = [
-    { icon: Phone, label: t("contact.info.phone"), value: "+1 (555) 123-4567", href: "tel:+15551234567", action: t("contact.info.callNow") },
-    { icon: Phone, label: t("contact.info.mobile"), value: "+1 (555) 987-6543", href: "tel:+15559876543", action: t("contact.info.callMobile") },
+    { icon: Phone, label: t("contact.info.phone"), value: "+93 767 101 001", href: "tel:+93767101001", action: t("contact.info.callNow") },
+    { icon: Phone, label: t("contact.info.mobile"), value: "+93 792 502 101", href: "tel:+93792502101", action: t("contact.info.callMobile") },
     { icon: Mail, label: t("contact.info.emailLabel"), value: "hello@turabroot.com", href: "mailto:hello@turabroot.com", action: t("contact.info.sendEmail") }
   ];
 
