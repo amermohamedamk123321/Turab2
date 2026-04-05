@@ -14,7 +14,7 @@ const ContactInfo = () => {
   ];
 
   const handleMapClick = () => {
-    window.open("https://maps.google.com/?q=123+Tech+Street,+San+Francisco,+CA", "_blank");
+    window.open("https://maps.google.com/?q=Kabul+West,+Afghanistan", "_blank");
   };
 
   return (
@@ -43,8 +43,8 @@ const ContactInfo = () => {
               <div className="p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors"><MapPin className="h-5 w-5 text-primary" /></div>
               <div>
                 <div className="text-sm text-muted-foreground">{t("contact.info.office")}</div>
-                <div className="font-semibold">123 Tech Street</div>
-                <div className="text-sm text-muted-foreground">San Francisco, CA 94105</div>
+                <div className="font-semibold">Kabul (west)</div>
+                <div className="text-sm text-muted-foreground">Afghanistan</div>
               </div>
             </div>
             <div className="h-32 bg-gradient-to-br from-primary/5 to-ring/5 rounded-2xl relative overflow-hidden group-hover:from-primary/10 group-hover:to-ring/10 transition-colors">
