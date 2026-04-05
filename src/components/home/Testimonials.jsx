@@ -55,9 +55,9 @@ const Testimonials = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {[
                 { number: "98%", label: t("testimonials.clientSatisfaction") },
-                { number: "150+", label: t("testimonials.projectsCompleted") },
+                { number: "20+", label: t("testimonials.projectsCompleted") },
                 { number: "24/7", label: t("testimonials.supportAvailable") },
-                { number: "5.0", label: t("testimonials.averageRating") }
+                { number: "4.5", label: t("testimonials.averageRating") }
               ].map((stat, index) => (
                 <motion.div key={index} initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }} viewport={{ once: true }}>
                   <div className="text-3xl md:text-4xl font-bold hero-gradient mb-2">{stat.number}</div>

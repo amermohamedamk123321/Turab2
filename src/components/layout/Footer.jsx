@@ -130,18 +130,6 @@ const Footer = () => {
                   </span>
                 </div>
               </div>
-              <div>
-                <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">Business Hours</h4>
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center gap-2.5 text-sm text-foreground/60">
-                    <Clock className="h-4 w-4 text-primary/70" />
-                    <div>
-                      <p>Mon – Fri: 9AM – 6PM</p>
-                      <p>Saturday: 10AM – 2PM</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
 
