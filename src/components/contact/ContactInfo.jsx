@@ -8,13 +8,13 @@ const ContactInfo = () => {
   const { t } = useTranslation();
 
   const contactInfo = [
-    { icon: Phone, label: t("contact.info.phone"), value: "+1 (555) 123-4567", href: "tel:+15551234567", action: t("contact.info.callNow") },
-    { icon: Phone, label: t("contact.info.mobile"), value: "+1 (555) 987-6543", href: "tel:+15559876543", action: t("contact.info.callMobile") },
-    { icon: Mail, label: t("contact.info.emailLabel"), value: "hello@turabroot.com", href: "mailto:hello@turabroot.com", action: t("contact.info.sendEmail") }
+    { icon: Phone, label: t("contact.info.phone"), value: "+93 767 101 001", href: "tel:+93767101001", action: t("contact.info.callNow") },
+    { icon: Phone, label: t("contact.info.mobile"), value: "+93 792 502 101", href: "tel:+93792502101", action: t("contact.info.callMobile") },
+    { icon: Mail, label: t("contact.info.emailLabel"), value: "turabacademy96@gmail.com", href: "mailto:turabacademy96@gmail.com", action: t("contact.info.sendEmail") }
   ];
 
   const handleMapClick = () => {
-    window.open("https://maps.google.com/?q=123+Tech+Street,+San+Francisco,+CA", "_blank");
+    window.open("https://maps.google.com/?q=Kabul+West,+Afghanistan", "_blank");
   };
 
   return (
@@ -27,7 +27,7 @@ const ContactInfo = () => {
                 <div className="p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors"><info.icon className="h-5 w-5 text-primary" /></div>
                 <div>
                   <div className="text-sm text-muted-foreground">{info.label}</div>
-                  <div className="font-semibold">{info.value}</div>
+                  <div className="font-semibold" dir="ltr">{info.value}</div>
                 </div>
               </div>
               <Button variant="ghost" size="sm" onClick={() => window.open(info.href, "_blank")} className="opacity-0 group-hover:opacity-100 transition-opacity">{info.action}</Button>
@@ -43,8 +43,8 @@ const ContactInfo = () => {
               <div className="p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors"><MapPin className="h-5 w-5 text-primary" /></div>
               <div>
                 <div className="text-sm text-muted-foreground">{t("contact.info.office")}</div>
-                <div className="font-semibold">123 Tech Street</div>
-                <div className="text-sm text-muted-foreground">San Francisco, CA 94105</div>
+                <div className="font-semibold">Kabul (west)</div>
+                <div className="text-sm text-muted-foreground">Afghanistan</div>
               </div>
             </div>
             <div className="h-32 bg-gradient-to-br from-primary/5 to-ring/5 rounded-2xl relative overflow-hidden group-hover:from-primary/10 group-hover:to-ring/10 transition-colors">

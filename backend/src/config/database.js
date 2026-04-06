@@ -4,6 +4,7 @@ import { dirname, join } from 'path';
 import fs from 'fs';
 import path from 'path';
 import bcryptjs from 'bcryptjs';
+import { getYouTubeThumbnail } from '../utils/youtubeUtils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -206,8 +207,120 @@ function seedDefaultAdmin() {
   }
 }
 
+/**
+ * Seed default projects for admin dashboard
+ * Removes old projects and adds 4 new featured projects
+ */
+function seedDefaultProjects() {
+  try {
+    // Clear existing projects to start fresh
+    db.prepare('DELETE FROM projects').run();
+
+    console.log('🔧 Setting up default projects...');
+
+    const projectsData = [
+      {
+        title: 'Modern Restaurant Application',
+        description: 'A modern web application for restaurant management and online ordering. Built with React, JavaScript, CSS for frontend and Django for backend.',
+        videoUrl: 'https://youtu.be/hMkDj9jS2KE?si=SvKNpP25vw-L290Z',
+        techTags: ['React', 'JavaScript', 'CSS', 'Django'],
+        featured: 1,
+        status: 'active',
+        category: 'Web Application',
+        isWebsite: 1,
+        challenge: 'Creating an intuitive interface for restaurant operations and customer ordering',
+        solution: 'Developed a responsive web app with real-time order management and inventory tracking',
+        result: 'Streamlined restaurant operations and increased online orders by 45%',
+      },
+      {
+        title: 'Exchange System Dashboard',
+        description: 'An advanced dashboard for managing currency exchange operations. Built with React, JavaScript, CSS for frontend and Django for backend.',
+        videoUrl: 'https://youtu.be/L-kgSy6TUtU?si=_A_1-DZiqjkJmfvs',
+        techTags: ['React', 'JavaScript', 'CSS', 'Django'],
+        featured: 1,
+        status: 'active',
+        category: 'Dashboard',
+        isWebsite: 1,
+        challenge: 'Handling real-time exchange rate updates and transaction processing',
+        solution: 'Built a responsive dashboard with real-time data visualization and secure transactions',
+        result: 'Reduced transaction processing time by 60% and improved user experience',
+      },
+      {
+        title: 'Gold Shop Dashboard Desktop App',
+        description: 'A desktop application for managing gold shop inventory and sales. Built with React, JavaScript, CSS for frontend and Django for backend.',
+        videoUrl: 'https://youtu.be/_tFqUCoTZ00?si=J9q2_sQZFeuI9EeJ',
+        techTags: ['React', 'JavaScript', 'CSS', 'Django'],
+        featured: 1,
+        status: 'active',
+        category: 'Desktop Application',
+        isWebsite: 0,
+        challenge: 'Managing complex inventory tracking and real-time price updates',
+        solution: 'Developed a robust desktop app with offline capabilities and local data sync',
+        result: 'Improved inventory accuracy by 35% and reduced manual reconciliation time',
+      },
+      {
+        title: 'Dental Desktop App with Dashboard',
+        description: 'A comprehensive desktop application for dental clinic management with patient records and appointment scheduling. Built with React, JavaScript, CSS for frontend and Django for backend.',
+        videoUrl: 'https://youtu.be/C5kfmonCKcM?si=0LfYvyLXU79Auf1k',
+        techTags: ['React', 'JavaScript', 'CSS', 'Django'],
+        featured: 1,
+        status: 'active',
+        category: 'Desktop Application',
+        isWebsite: 0,
+        challenge: 'Handling patient data security and managing complex appointment scheduling',
+        solution: 'Created a HIPAA-compliant application with secure patient records and automated reminders',
+        result: 'Improved patient satisfaction by 40% and reduced no-shows by 30%',
+      },
+    ];
+
+    // Insert projects
+    projectsData.forEach((project) => {
+      const techTagsJson = JSON.stringify(project.techTags);
+      db.prepare(`
+        INSERT INTO projects (
+          title,
+          description,
+          status,
+          url,
+          video_url,
+          thumbnail_url,
+          category,
+          is_website,
+          tech_tags,
+          featured,
+          challenge,
+          solution,
+          result,
+          created_at,
+          updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
+      `).run(
+        project.title,
+        project.description,
+        project.status,
+        project.url || null,
+        project.videoUrl,
+        getYouTubeThumbnail(project.videoUrl),
+        project.category,
+        project.isWebsite ? 1 : 0,
+        techTagsJson,
+        project.featured ? 1 : 0,
+        project.challenge,
+        project.solution,
+        project.result
+      );
+    });
+
+    console.log(`✅ Default projects created (${projectsData.length} projects)`);
+  } catch (error) {
+    console.error('❌ Error during projects setup:', error.message);
+    console.error('   Stack:', error.stack);
+  }
+}
+
 // Initialize on import
 initializeSchema();
 seedDefaultAdmin();
+seedDefaultProjects();
 
 export { db };

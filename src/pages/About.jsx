@@ -56,7 +56,7 @@ const About = () => {
               </h2>
               <p className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-6 sm:mb-7 md:mb-8">{t("about.mission.description")}</p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 pt-6 sm:pt-8">
-                <div><div className="text-2xl sm:text-3xl font-bold hero-gradient mb-2">150+</div><div className="text-sm sm:text-base text-muted-foreground">{t("about.mission.projectsDelivered")}</div></div>
+                <div><div className="text-2xl sm:text-3xl font-bold hero-gradient mb-2">20+</div><div className="text-sm sm:text-base text-muted-foreground">{t("about.mission.projectsDelivered")}</div></div>
                 <div><div className="text-2xl sm:text-3xl font-bold hero-gradient mb-2">98%</div><div className="text-sm sm:text-base text-muted-foreground">{t("about.mission.clientSatisfaction")}</div></div>
                 <div><div className="text-2xl sm:text-3xl font-bold hero-gradient mb-2">24/7</div><div className="text-sm sm:text-base text-muted-foreground">{t("about.mission.supportAvailable")}</div></div>
               </div>
@@ -76,16 +76,8 @@ const About = () => {
                 {t("about.workWithUs.title")} <span className="hero-gradient">{t("about.workWithUs.titleHighlight")}</span>
               </h2>
               <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-5 sm:mb-6">{t("about.workWithUs.description")}</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 text-xs sm:text-sm text-muted-foreground">
-                <div>
-                  <div className="font-bold text-foreground mb-1">{t("about.workWithUs.officeHours")}</div>
-                  <div>{t("about.workWithUs.monFri")}</div>
-                  <div>{t("about.workWithUs.sat")}</div>
-                </div>
-                <div>
-                  <div className="font-bold text-foreground mb-1">{t("about.workWithUs.responseTime")}</div>
-                  <div>{t("about.workWithUs.initialConsultation")}</div>
-                  <div>{t("about.workWithUs.projectProposals")}</div>
+              <div className="flex justify-center items-center">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 text-xs sm:text-sm text-muted-foreground mx-auto">
                 </div>
               </div>
             </GlassCard>
