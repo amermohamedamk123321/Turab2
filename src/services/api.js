@@ -111,6 +111,10 @@ const seedFallbackData = () => {
   }
 };
 
+// Clear stale fallback projects cache to fetch fresh data from API
+// This ensures the app always gets the latest projects from the backend
+localStorage.removeItem(STORAGE_KEYS.PROJECTS);
+
 // Seed fallback data on module load
 seedFallbackData();
 
