@@ -1,8 +1,19 @@
 import dotenv from 'dotenv';
-import app from './src/app.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-// Load environment variables from .env file
-dotenv.config();
+// Get current directory
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load .env from current directory
+dotenv.config({ path: path.join(__dirname, '.env') });
+
+// Verify JWT_SECRET is loaded
+console.log('🔐 [DEBUG] JWT_SECRET loaded:', process.env.JWT_SECRET ? '✅ YES' : '❌ NO');
+console.log('🔐 [DEBUG] NODE_ENV:', process.env.NODE_ENV);
+
+import app from './src/app.js';
 
 /**
  * Validate required environment variables on startup
@@ -10,7 +21,6 @@ dotenv.config();
 const validateEnvironment = () => {
   const requiredVars = ['JWT_SECRET', 'JWT_REFRESH_SECRET'];
 
-  // In production, ensure secrets are not default/placeholder values
   if (process.env.NODE_ENV === 'production') {
     const missing = requiredVars.filter(
       varName => !process.env[varName] || process.env[varName].startsWith('your_')
@@ -24,13 +34,9 @@ const validateEnvironment = () => {
       console.error(
         '⚠️  Please set these variables in .env file before starting the server'
       );
-      console.error('📋 Required variables:');
-      console.error('  - JWT_SECRET (strong random string)');
-      console.error('  - JWT_REFRESH_SECRET (strong random string)');
       process.exit(1);
     }
   } else {
-    // In development, just warn if using default values
     const defaultSecrets = requiredVars.filter(
       varName => !process.env[varName] || process.env[varName].startsWith('your_')
     );
@@ -45,7 +51,6 @@ const validateEnvironment = () => {
   console.log('✅ Environment validation passed');
 };
 
-// Validate environment before starting
 validateEnvironment();
 
 const PORT = process.env.PORT || 3001;

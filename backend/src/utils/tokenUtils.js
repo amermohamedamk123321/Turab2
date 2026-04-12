@@ -1,15 +1,17 @@
 import jwt from 'jsonwebtoken';
 import { randomBytes } from 'crypto';
 
-const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
-const JWT_ACCESS_EXPIRY = process.env.JWT_ACCESS_EXPIRY || '15m';
-const JWT_REFRESH_EXPIRY = process.env.JWT_REFRESH_EXPIRY || '7d';
-
 /**
  * Generate access token (short-lived)
  */
 export function generateAccessToken(adminId, email) {
+  const JWT_SECRET = process.env.JWT_SECRET;
+  const JWT_ACCESS_EXPIRY = process.env.JWT_ACCESS_EXPIRY || '15m';
+  
+  if (!JWT_SECRET) {
+    throw new Error('JWT_SECRET is not defined in environment');
+  }
+  
   return jwt.sign(
     {
       id: adminId,
@@ -28,6 +30,13 @@ export function generateAccessToken(adminId, email) {
  * Generate refresh token (long-lived)
  */
 export function generateRefreshToken(adminId) {
+  const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
+  const JWT_REFRESH_EXPIRY = process.env.JWT_REFRESH_EXPIRY || '7d';
+  
+  if (!JWT_REFRESH_SECRET) {
+    throw new Error('JWT_REFRESH_SECRET is not defined in environment');
+  }
+  
   return jwt.sign(
     {
       id: adminId,
@@ -44,6 +53,12 @@ export function generateRefreshToken(adminId) {
  * Verify access token
  */
 export function verifyAccessToken(token) {
+  const JWT_SECRET = process.env.JWT_SECRET;
+  
+  if (!JWT_SECRET) {
+    throw new Error('JWT_SECRET is not defined in environment');
+  }
+  
   try {
     return jwt.verify(token, JWT_SECRET);
   } catch (error) {
@@ -55,6 +70,12 @@ export function verifyAccessToken(token) {
  * Verify refresh token
  */
 export function verifyRefreshToken(token) {
+  const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
+  
+  if (!JWT_REFRESH_SECRET) {
+    throw new Error('JWT_REFRESH_SECRET is not defined in environment');
+  }
+  
   try {
     return jwt.verify(token, JWT_REFRESH_SECRET);
   } catch (error) {
