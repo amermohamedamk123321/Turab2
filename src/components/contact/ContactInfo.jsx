@@ -70,7 +70,6 @@ const ContactInfo = () => {
           <div className="space-y-2 text-sm">
             <div className="flex justify-between"><span className="text-muted-foreground">{t("contact.info.monFri")}</span><span className="font-medium">{t("contact.info.monFriHours")}</span></div>
             <div className="flex justify-between"><span className="text-muted-foreground">{t("contact.info.saturday")}</span><span className="font-medium">{t("contact.info.satHours")}</span></div>
-            <div className="flex justify-between"><span className="text-muted-foreground">{t("contact.info.sunday")}</span><span className="font-medium">{t("contact.info.closed")}</span></div>
           </div>
         </GlassCard>
       </motion.div>

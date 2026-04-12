@@ -217,10 +217,10 @@
       "clickToOpenMap": "برای باز کردن نقشه کلیک کنید",
       "openFullMap": "باز کردن نقشه کامل",
       "businessHours": "ساعات کاری",
-      "monFri": "دوشنبه - جمعه",
+      "monFri": "شنبه - پنج‌شنبه",
       "monFriHours": "۹:۰۰ صبح - ۶:۰۰ عصر",
-      "saturday": "شنبه",
-      "satHours": "۱۰:۰۰ صبح - ۲:۰۰ بعد از ظهر",
+      "saturday": "جمعه",
+      "satHours": "تعطیل",
       "sunday": "یکشنبه",
       "closed": "تعطیل"
     },
