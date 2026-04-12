@@ -56,7 +56,7 @@ const Testimonials = () => {
               {[
                 { number: "98%", label: t("testimonials.clientSatisfaction") },
                 { number: "9+", label: t("testimonials.projectsCompleted") },
-                { number: "365 days/year", label: t("testimonials.supportAvailable") },
+                { number: "365", label: t("testimonials.supportAvailable") },
                 { number: "4.5", label: t("testimonials.averageRating") }
               ].map((stat, index) => (
                 <motion.div key={index} initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }} viewport={{ once: true }}>
