@@ -6,9 +6,9 @@ import { useTranslation } from "react-i18next";
 import SectionHeading from "@/components/ui/SectionHeading";
 
 const testimonials = [
-  { name: "Sarah Johnson", role: "CEO, TechFlow Solutions", content: "Turab Root transformed our digital presence completely. Their attention to detail and innovative approach exceeded all our expectations. The results speak for themselves.", rating: 5, company: "TechFlow Solutions" },
-  { name: "Michael Chen", role: "Product Manager, InnovateCorp", content: "Working with Turab Root was a game-changer for our product launch. They delivered a stunning platform that our users absolutely love. Highly recommended!", rating: 5, company: "InnovateCorp" },
-  { name: "Emily Rodriguez", role: "Marketing Director, GrowthLab", content: "The team's expertise in both design and development is remarkable. They created something that not only looks amazing but performs flawlessly across all devices.", rating: 5, company: "GrowthLab" }
+  { name: "Miss Benazir", role: "CEO", content: "Turab Root transformed our digital presence completely. Their attention to detail and innovative approach exceeded all our expectations. The results speak for themselves.", rating: 5, company: "TechFlow Solutions" },
+  { name: "MGM Mining", role: "Product Manager, InnovateCorp", content: "Working with Turab Root was a game-changer for our product launch. They delivered a stunning platform that our users absolutely love. Highly recommended!", rating: 5, company: "InnovateCorp" },
+  { name: "Moaser Dental Hospital", role: "", content: "The team's expertise in both design and development is remarkable. They created something that not only looks amazing but performs flawlessly across all devices.", rating: 5, company: "GrowthLab" }
 ];
 
 const Testimonials = () => {
@@ -41,7 +41,7 @@ const Testimonials = () => {
                   <blockquote className="text-foreground mb-6 leading-relaxed italic">"{testimonial.content}"</blockquote>
                   <div className="pt-6">
                     <div className="font-bold text-foreground mb-1">{testimonial.name}</div>
-                    <div className="text-sm text-muted-foreground">{testimonial.role}</div>
+                    {testimonial.role && <div className="text-sm text-muted-foreground">{testimonial.role}</div>}
                     <div className="text-sm text-primary font-semibold">{testimonial.company}</div>
                   </div>
                 </div>
@@ -55,8 +55,8 @@ const Testimonials = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {[
                 { number: "98%", label: t("testimonials.clientSatisfaction") },
-                { number: "20+", label: t("testimonials.projectsCompleted") },
-                { number: "24/7", label: t("testimonials.supportAvailable") },
+                { number: "9+", label: t("testimonials.projectsCompleted") },
+                { number: "365 days/year", label: t("testimonials.supportAvailable") },
                 { number: "4.5", label: t("testimonials.averageRating") }
               ].map((stat, index) => (
                 <motion.div key={index} initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }} viewport={{ once: true }}>
