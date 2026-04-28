@@ -56,7 +56,7 @@ const About = () => {
               </h2>
               <p className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-6 sm:mb-7 md:mb-8">{t("about.mission.description")}</p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 pt-6 sm:pt-8">
-                <div><div className="text-2xl sm:text-3xl font-bold hero-gradient mb-2">20+</div><div className="text-sm sm:text-base text-muted-foreground">{t("about.mission.projectsDelivered")}</div></div>
+                <div><div className="text-2xl sm:text-3xl font-bold hero-gradient mb-2">9+</div><div className="text-sm sm:text-base text-muted-foreground">{t("about.mission.projectsDelivered")}</div></div>
                 <div><div className="text-2xl sm:text-3xl font-bold hero-gradient mb-2">98%</div><div className="text-sm sm:text-base text-muted-foreground">{t("about.mission.clientSatisfaction")}</div></div>
                 <div><div className="text-2xl sm:text-3xl font-bold hero-gradient mb-2">24/7</div><div className="text-sm sm:text-base text-muted-foreground">{t("about.mission.supportAvailable")}</div></div>
               </div>
