@@ -5,14 +5,49 @@ import Values from "@/components/about/Values";
 import { GlassCard } from "@/components/ui/glass-card";
 import Orb from "@/components/ui/Orb";
 import { useSEO } from "@/hooks/use-seo";
+import { useHreflang } from "@/hooks/use-hreflang";
+import { useBreadcrumbSchema } from "@/hooks/use-breadcrumb-schema";
+import { combineKeywords, combinePersianKeywords, getCanonicalUrl } from "@/utils/seo";
 
 const About = () => {
   const { t } = useTranslation();
+  useHreflang();
+  useBreadcrumbSchema([
+    { name: "Home", url: "https://turabroot.com/" },
+    { name: "About", url: "https://turabroot.com/about" }
+  ]);
+
+  const seoConfig = {
+    title: {
+      en: "About Us – Afghanistan's Leading Software Company",
+      fa: "درباره ما | شرکت نرم‌افزاری پیشرو افغانستان"
+    },
+    description: {
+      en: "Learn about Turab Root, a passionate software company in Afghanistan building websites, mobile apps, desktop applications & cybersecurity solutions for global clients.",
+      fa: "درباره تراب روت بیاموزید، یک شرکت نرم‌افزاری با انگیزه در افغانستان که وب‌سایت‌ها، اپلیکیشن‌های موبایل، برنامه‌های کمپیوتری و راه‌حل‌های امنیت سایبری برای مشتریان جهانی می‌سازد."
+    },
+    canonical: {
+      en: getCanonicalUrl("/about", "en"),
+      fa: getCanonicalUrl("/about", "fa")
+    },
+    keywords: {
+      en: combineKeywords(
+        ["about software company", "company history", "our team", "company mission",
+         "software development company", "Afghanistan tech company", "company values",
+         "professional services", "experienced developers"]
+      ),
+      fa: combinePersianKeywords(
+        ["درباره شرکت", "تیم ما", "مأموریت", "تاریخچه", "تجربه", "متخصص",
+         "نرم‌افزار", "توسعه"]
+      )
+    }
+  };
 
   useSEO({
-    title: "About Us – Afghanistan's Leading Software Company",
-    description: "Learn about Turab Root, a passionate software company in Afghanistan building websites, mobile apps, desktop applications & cybersecurity solutions for global clients.",
-    canonical: "https://turabroot.com/about",
+    title: seoConfig.title,
+    description: seoConfig.description,
+    canonical: seoConfig.canonical,
+    keywords: seoConfig.keywords.en,
   });
 
   return (

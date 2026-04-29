@@ -4,9 +4,16 @@ import Services from "@/components/home/Services";
 import Testimonials from "@/components/home/Testimonials";
 import CTAStrip from "@/components/home/CTAStrip";
 import { useSEO } from "@/hooks/use-seo";
+import { useHreflang } from "@/hooks/use-hreflang";
+import { useBreadcrumbSchema } from "@/hooks/use-breadcrumb-schema";
 import { combineKeywords, combinePersianKeywords, getCanonicalUrl } from "@/utils/seo";
 
 const Home = () => {
+  useHreflang();
+  useBreadcrumbSchema([
+    { name: "Home", url: "https://turabroot.com/" }
+  ]);
+
   // Localized SEO content with Persian keyword optimization
   const seoConfig = {
     title: {

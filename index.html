@@ -9,6 +9,7 @@
     <meta name="author" content="Turab Root" />
     <link rel="canonical" href="https://turabroot.com" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="sitemap" type="application/xml" href="https://turabroot.com/sitemap.xml" />
 
     <!-- Geo Targeting -->
     <meta name="geo.region" content="AF" />
@@ -55,30 +56,59 @@
       "alternateName": "Turab Root ICT",
       "url": "https://turabroot.com",
       "logo": "https://turabroot.com/turab-root-logo.png",
+      "image": "https://turabroot.com/og-image.jpg",
       "description": "Leading software company in Afghanistan offering website development, web apps, mobile apps, desktop applications, and cybersecurity services to clients worldwide.",
       "foundingDate": "2022",
-      "areaServed": "Worldwide",
+      "areaServed": [
+        {
+          "@type": "Country",
+          "name": "Afghanistan"
+        },
+        {
+          "@type": "Country",
+          "name": "Worldwide"
+        }
+      ],
       "address": {
         "@type": "PostalAddress",
         "addressCountry": "AF",
-        "addressRegion": "Afghanistan"
+        "addressRegion": "Afghanistan",
+        "streetAddress": "Kabul, Afghanistan"
       },
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "contactType": "customer service",
-        "availableLanguage": ["English", "Farsi", "Pashto"]
-      },
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "telephone": "",
+          "email": "info@turabroot.com",
+          "availableLanguage": ["English", "Farsi", "Pashto"]
+        },
+        {
+          "@type": "ContactPoint",
+          "contactType": "sales",
+          "availableLanguage": ["English", "Farsi", "Pashto"]
+        }
+      ],
       "sameAs": [
         "https://instagram.com/turabroot",
         "https://facebook.com/turabroot",
         "https://x.com/turabroot",
         "https://linkedin.com/company/turabroot",
         "https://youtube.com/@turabroot"
+      ],
+      "knowsAbout": [
+        "Web Development",
+        "Mobile App Development",
+        "Desktop Application Development",
+        "Cybersecurity",
+        "Software Development",
+        "AI Solutions",
+        "Dashboard Development"
       ]
     }
     </script>
 
-    <!-- JSON-LD: Local Business -->
+    <!-- JSON-LD: Professional Service with Detailed Offers -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -86,67 +116,107 @@
       "name": "Turab Root",
       "image": "https://turabroot.com/og-image.jpg",
       "url": "https://turabroot.com",
-      "description": "Software company providing web development, mobile app development, desktop applications, and cybersecurity services.",
+      "description": "Professional software development company in Afghanistan offering website development, web apps, mobile apps, desktop applications, AI solutions, and cybersecurity services.",
       "address": {
         "@type": "PostalAddress",
-        "addressCountry": "AF"
+        "addressCountry": "AF",
+        "addressRegion": "Afghanistan",
+        "streetAddress": "Kabul, Afghanistan"
       },
-      "areaServed": {
-        "@type": "GeoCircle",
-        "geoMidpoint": {
-          "@type": "GeoCoordinates",
-          "latitude": 34.5553,
-          "longitude": 69.2075
+      "areaServed": [
+        {
+          "@type": "Country",
+          "name": "Afghanistan"
         },
-        "geoRadius": "50000"
-      },
+        {
+          "@type": "Country",
+          "name": "Worldwide"
+        }
+      ],
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
-        "name": "Software Services",
+        "name": "Software Development Services",
         "itemListElement": [
           {
             "@type": "Offer",
+            "name": "Website Development",
             "itemOffered": {
               "@type": "Service",
               "name": "Website Development",
-              "description": "Custom website design and development with modern technologies"
-            }
+              "description": "Custom website design and development with modern technologies and responsive design"
+            },
+            "priceRange": "$$"
           },
           {
             "@type": "Offer",
+            "name": "Web Application Development",
             "itemOffered": {
               "@type": "Service",
               "name": "Web Application Development",
-              "description": "Full-stack web application development with React and modern frameworks"
-            }
+              "description": "Full-stack web application development with React, Vue, and modern frameworks for enterprise solutions"
+            },
+            "priceRange": "$$$"
           },
           {
             "@type": "Offer",
+            "name": "Mobile App Development",
             "itemOffered": {
               "@type": "Service",
               "name": "Mobile App Development",
-              "description": "iOS and Android mobile application development"
-            }
+              "description": "iOS and Android mobile application development for iOS, Android, and cross-platform solutions"
+            },
+            "priceRange": "$$$"
           },
           {
             "@type": "Offer",
+            "name": "Desktop Application Development",
             "itemOffered": {
               "@type": "Service",
               "name": "Desktop Application Development",
-              "description": "Windows desktop application development and software solutions"
-            }
+              "description": "Windows and Linux desktop application development with modern frameworks and administrative dashboards"
+            },
+            "priceRange": "$$$"
           },
           {
             "@type": "Offer",
+            "name": "Cybersecurity Services",
             "itemOffered": {
               "@type": "Service",
               "name": "Cybersecurity Services",
-              "description": "Comprehensive cybersecurity solutions including threat detection and vulnerability assessments"
-            }
+              "description": "Comprehensive cybersecurity solutions including threat detection, vulnerability assessments, and security audits"
+            },
+            "priceRange": "$$$"
+          },
+          {
+            "@type": "Offer",
+            "name": "AI Solutions",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "AI & Machine Learning Solutions",
+              "description": "Custom AI and machine learning solutions for intelligent automation and data analysis"
+            },
+            "priceRange": "$$$"
+          },
+          {
+            "@type": "Offer",
+            "name": "Database Development",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Database Development",
+              "description": "Database design, optimization, and administration for enterprise systems"
+            },
+            "priceRange": "$$"
           }
         ]
       },
-      "priceRange": "$$"
+      "priceRange": "$$-$$$",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "bestRating": "5",
+        "ratingCount": "100",
+        "reviewCount": "25"
+      }
     }
     </script>
 

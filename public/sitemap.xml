@@ -1,23 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <!-- Home Page -->
   <url>
     <loc>https://turabroot.com/</loc>
+    <lastmod>2024-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://turabroot.com/" />
+    <xhtml:link rel="alternate" hreflang="fa" href="https://turabroot.com/?lang=fa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://turabroot.com/" />
   </url>
+
+  <!-- Projects Page -->
   <url>
     <loc>https://turabroot.com/projects</loc>
+    <lastmod>2024-01-01</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://turabroot.com/projects" />
+    <xhtml:link rel="alternate" hreflang="fa" href="https://turabroot.com/projects?lang=fa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://turabroot.com/projects" />
   </url>
+
+  <!-- About Page -->
   <url>
     <loc>https://turabroot.com/about</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://turabroot.com/contact</loc>
+    <lastmod>2024-01-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://turabroot.com/about" />
+    <xhtml:link rel="alternate" hreflang="fa" href="https://turabroot.com/about?lang=fa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://turabroot.com/about" />
   </url>
+
+  <!-- Contact Page -->
+  <url>
+    <loc>https://turabroot.com/contact</loc>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://turabroot.com/contact" />
+    <xhtml:link rel="alternate" hreflang="fa" href="https://turabroot.com/contact?lang=fa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://turabroot.com/contact" />
+  </url>
+
+  <!-- Service Pages -->
+  <!-- Website Development -->
+  <url>
+    <loc>https://turabroot.com/services/website-development</loc>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://turabroot.com/services/website-development" />
+    <xhtml:link rel="alternate" hreflang="fa" href="https://turabroot.com/services/website-development?lang=fa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://turabroot.com/services/website-development" />
+  </url>
+
+  <!-- Web Application -->
+  <url>
+    <loc>https://turabroot.com/services/web-application</loc>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://turabroot.com/services/web-application" />
+    <xhtml:link rel="alternate" hreflang="fa" href="https://turabroot.com/services/web-application?lang=fa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://turabroot.com/services/web-application" />
+  </url>
+
+  <!-- Mobile App -->
+  <url>
+    <loc>https://turabroot.com/services/mobile-app</loc>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://turabroot.com/services/mobile-app" />
+    <xhtml:link rel="alternate" hreflang="fa" href="https://turabroot.com/services/mobile-app?lang=fa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://turabroot.com/services/mobile-app" />
+  </url>
+
+  <!-- Desktop Application -->
+  <url>
+    <loc>https://turabroot.com/services/desktop-application</loc>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://turabroot.com/services/desktop-application" />
+    <xhtml:link rel="alternate" hreflang="fa" href="https://turabroot.com/services/desktop-application?lang=fa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://turabroot.com/services/desktop-application" />
+  </url>
+
+  <!-- Cybersecurity -->
+  <url>
+    <loc>https://turabroot.com/services/cybersecurity</loc>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://turabroot.com/services/cybersecurity" />
+    <xhtml:link rel="alternate" hreflang="fa" href="https://turabroot.com/services/cybersecurity?lang=fa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://turabroot.com/services/cybersecurity" />
+  </url>
+
+  <!-- AI Solutions -->
+  <url>
+    <loc>https://turabroot.com/services/ai-solutions</loc>
+    <lastmod>2024-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://turabroot.com/services/ai-solutions" />
+    <xhtml:link rel="alternate" hreflang="fa" href="https://turabroot.com/services/ai-solutions?lang=fa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://turabroot.com/services/ai-solutions" />
+  </url>
+
 </urlset>

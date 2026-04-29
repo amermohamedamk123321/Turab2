@@ -9,12 +9,48 @@ import Aurora from "@/components/ui/Aurora";
 import { projectsApi } from "@/services/api";
 import { Loader2 } from "lucide-react";
 import { useSEO } from "@/hooks/use-seo";
+import { useHreflang } from "@/hooks/use-hreflang";
+import { useBreadcrumbSchema } from "@/hooks/use-breadcrumb-schema";
+import { combineKeywords, combinePersianKeywords, getCanonicalUrl } from "@/utils/seo";
 
 const Projects = () => {
+  useHreflang();
+  useBreadcrumbSchema([
+    { name: "Home", url: "https://turabroot.com/" },
+    { name: "Projects", url: "https://turabroot.com/projects" }
+  ]);
+
+  const seoConfig = {
+    title: {
+      en: "Our Portfolio – Websites, Apps & Software Projects",
+      fa: "نمونه کارهای ما | وب‌سایت‌ها، اپلیکیشن‌ها و پروژه‌های نرم‌افزاری"
+    },
+    description: {
+      en: "Explore Turab Root's portfolio of websites, web apps, mobile applications, desktop software, and cybersecurity projects delivered to clients worldwide.",
+      fa: "نمونه کارهای تراب روت را کشف کنید که شامل وب‌سایت‌ها، اپلیکیشن‌های وب، اپلیکیشن‌های موبایل، نرم‌افزارهای کمپیوتری و پروژه‌های امنیت سایبری برای مشتریان جهانی است."
+    },
+    canonical: {
+      en: getCanonicalUrl("/projects", "en"),
+      fa: getCanonicalUrl("/projects", "fa")
+    },
+    keywords: {
+      en: combineKeywords(
+        ["portfolio projects", "website examples", "web app projects", "mobile app portfolio",
+         "software development projects", "desktop application examples", "cybersecurity solutions",
+         "project showcase", "client work", "technology projects"]
+      ),
+      fa: combinePersianKeywords(
+        ["نمونه کارها", "پروژه‌های وب", "اپلیکیشن موبایل", "نرم‌افزار کمپیوتری",
+         "پروژه‌های توسعه", "کار انجام شده", "تجربه شرکت"]
+      )
+    }
+  };
+
   useSEO({
-    title: "Our Portfolio – Websites, Apps & Software Projects",
-    description: "Explore Turab Root's portfolio of websites, web apps, mobile applications, desktop software, and cybersecurity projects delivered to clients worldwide.",
-    canonical: "https://turabroot.com/projects",
+    title: seoConfig.title,
+    description: seoConfig.description,
+    canonical: seoConfig.canonical,
+    keywords: seoConfig.keywords.en,
   });
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
