@@ -150,6 +150,19 @@ function initializeSchema() {
     )
   `);
 
+  // Create partners table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS partners (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      description TEXT NOT NULL,
+      image_base64 LONGTEXT NOT NULL,
+      position INTEGER DEFAULT 0,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
   // Create indexes
   db.exec(`
     CREATE INDEX IF NOT EXISTS idx_projects_featured ON projects(featured);
@@ -160,6 +173,7 @@ function initializeSchema() {
     CREATE INDEX IF NOT EXISTS idx_sessions_admin_id ON sessions(admin_id);
     CREATE INDEX IF NOT EXISTS idx_audit_logs_admin_id ON audit_logs(admin_id);
     CREATE INDEX IF NOT EXISTS idx_audit_logs_timestamp ON audit_logs(timestamp);
+    CREATE INDEX IF NOT EXISTS idx_partners_created_at ON partners(created_at);
   `);
 
   console.log('Database schema initialized successfully');
