@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import Timeline from "@/components/about/Timeline";
 import Values from "@/components/about/Values";
+import Partners from "@/components/about/Partners";
 import { GlassCard } from "@/components/ui/glass-card";
 import Orb from "@/components/ui/Orb";
 import { useSEO } from "@/hooks/use-seo";
@@ -101,6 +102,7 @@ const About = () => {
       </div>
 
       <Timeline />
+      <Partners />
       <Values />
 
       <section className="py-12 sm:py-16 md:py-20">

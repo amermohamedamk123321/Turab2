@@ -129,6 +129,11 @@
       "qualitySupport": "کیفیت و پشتیبانی",
       "qualitySupportDesc": "ما کیفیت برتر را با پشتیبانی اختصاصی ارایه می‌دهیم و موفقیت شما را حتی پس از راه‌اندازی تضمین می‌کنیم."
     },
+    "partners": {
+      "title": "شرکای",
+      "highlight": "ما",
+      "subtitle": "شراکت‌های قابل اعتماد که موفقیت را رانند می‌دهند"
+    },
     "workWithUs": {
       "title": "همکاری با",
       "titleHighlight": "ما",
@@ -260,7 +265,8 @@
       "projects": "پروژه‌ها",
       "messages": "پیام‌ها",
       "client": "مشتریان",
-      "socialMedia": "رسانه‌های اجتماعی"
+      "socialMedia": "رسانه‌های اجتماعی",
+      "partners": "شرکاء"
     },
     "security": {
       "title": "امنیت",
@@ -308,6 +314,53 @@
         "message": "حذف درخواست مشتری از",
         "cancel": "لغو",
         "confirm": "حذف"
+      }
+    },
+    "partners": {
+      "title": "شرکاء",
+      "subtitle": "مدیریت شرکاء تجاری تان",
+      "addPartner": "افزودن شریک",
+      "editPartner": "ویرایش شریک",
+      "deletePartner": "حذف شریک",
+      "form": {
+        "name": "نام شریک",
+        "description": "توضیحات",
+        "image": "لوگوی شریک",
+        "imagePreview": "پیش‌نمایش تصویر",
+        "selectImage": "انتخاب تصویر",
+        "replaceImage": "تعویض تصویر",
+        "removeImage": "حذف تصویر",
+        "dragDrop": "تصویر را اینجا بکشید و رها کنید یا برای انتخاب کلیک کنید",
+        "save": "ذخیره شریک",
+        "cancel": "لغو",
+        "create": "ایجاد"
+      },
+      "validation": {
+        "nameRequired": "نام شریک ضروری است",
+        "descriptionRequired": "توضیحات ضروری است",
+        "descriptionMinLength": "توضیحات باید حداقل ۱۰ کاراکتر باشد",
+        "imageRequired": "تصویر شریک ضروری است",
+        "imageInvalid": "فرمت تصویر نامعتبر است. فرمت‌های پشتیبانی شده: JPEG, PNG, WebP, GIF",
+        "imageTooLarge": "اندازه تصویر بیش از ۵۰ مگابایت است",
+        "maxPartnersReached": "حداکثر ۱۰ شریک مجاز است"
+      },
+      "messages": {
+        "successAdded": "شریک با موفقیت افزوده شد",
+        "successUpdated": "شریک با موفقیت به‌روزرسانی شد",
+        "successDeleted": "شریک با موفقیت حذف شد",
+        "errorAdding": "افزودن شریک ناموفق بود",
+        "errorUpdating": "به‌روزرسانی شریک ناموفق بود",
+        "errorDeleting": "حذف شریک ناموفق بود",
+        "confirmDelete": "مطمئن هستید؟ این عمل قابل بازگشت نیست.",
+        "noPartners": "هنوز شریکی افزوده نشده است. یکی را افزود!",
+        "maxPartnersWarning": "تعداد حداکثر شرکاء (۱۰) رسیده است"
+      },
+      "table": {
+        "name": "نام",
+        "description": "توضیحات",
+        "image": "لوگو",
+        "created": "ایجاد شده",
+        "actions": "عملیات"
       }
     }
   },

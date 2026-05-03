@@ -599,3 +599,50 @@ export const projectRequestsApi = {
     return true;
   },
 };
+
+// ===== PARTNERS API =====
+export const partnersApi = {
+  list: async () => {
+    const response = await apiRequest('/partners');
+    return response.data;
+  },
+
+  getById: async (id) => {
+    const response = await apiRequest(`/partners/${id}`);
+    return response.data;
+  },
+
+  create: async ({ name, description, image_base64 }) => {
+    const response = await apiRequest('/partners', {
+      method: 'POST',
+      body: JSON.stringify({
+        name,
+        description,
+        image_base64,
+      }),
+    });
+
+    return response.data;
+  },
+
+  update: async (id, { name, description, image_base64 }) => {
+    const data = {};
+    if (name !== undefined) data.name = name;
+    if (description !== undefined) data.description = description;
+    if (image_base64 !== undefined) data.image_base64 = image_base64;
+
+    const response = await apiRequest(`/partners/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+
+    return response.data;
+  },
+
+  delete: async (id) => {
+    await apiRequest(`/partners/${id}`, {
+      method: 'DELETE',
+    });
+    return true;
+  },
+};
