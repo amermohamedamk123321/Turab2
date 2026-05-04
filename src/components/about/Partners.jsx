@@ -20,11 +20,13 @@ export default function Partners() {
 
   const loadPartners = async () => {
     try {
-      setLoading(false);
       const data = await partnersApi.list();
-      setPartners(data);
+      console.log('✅ Partners loaded:', data);
+      setPartners(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error('Failed to load partners:', err);
+      console.error('❌ Failed to load partners:', err);
+      setPartners([]);
+    } finally {
       setLoading(false);
     }
   };
@@ -57,8 +59,10 @@ export default function Partners() {
     setIsAutoPlay(false);
   };
 
-  // Don't render section if no partners
-  if (partners.length === 0) return null;
+  // Don't render section if loading and no partners yet
+  if (loading && partners.length === 0) return null;
+  // Don't render section if not loading and no partners
+  if (!loading && partners.length === 0) return null;
 
   const currentPartner = partners[currentIndex];
 
