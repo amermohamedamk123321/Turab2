@@ -332,9 +332,53 @@ function seedDefaultProjects() {
   }
 }
 
+/**
+ * Seed default partners for display
+ */
+function seedDefaultPartners() {
+  try {
+    // Check if partners already exist
+    const count = db.prepare('SELECT COUNT(*) as total FROM partners').get();
+    if (count.total > 0) {
+      console.log('✅ Partners already exist, skipping seed');
+      return;
+    }
+
+    console.log('🔧 Setting up default partners...');
+
+    // Simple SVG-based placeholder images for partners
+    const partnersData = [
+      {
+        name: 'Maoser Dental Hospital',
+        description: 'A leading dental hospital in Afghanistan providing comprehensive dental care and treatment services. Turab Root developed their professional website (moaserdentalhospital.com) to showcase their services and connect with patients.',
+        // SVG placeholder converted to Base64
+        image_base64: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzA3QTBGQyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjI0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk1hb3NlcjwvdGV4dD48L3N2Zz4='
+      }
+    ];
+
+    // Insert partners
+    partnersData.forEach((partner) => {
+      db.prepare(`
+        INSERT INTO partners (name, description, image_base64, created_at, updated_at)
+        VALUES (?, ?, ?, datetime('now'), datetime('now'))
+      `).run(
+        partner.name,
+        partner.description,
+        partner.image_base64
+      );
+    });
+
+    console.log(`✅ Default partners created (${partnersData.length} partners)`);
+  } catch (error) {
+    console.error('❌ Error during partners setup:', error.message);
+    console.error('   Stack:', error.stack);
+  }
+}
+
 // Initialize on import
 initializeSchema();
 seedDefaultAdmin();
 seedDefaultProjects();
+seedDefaultPartners();
 
 export { db };
