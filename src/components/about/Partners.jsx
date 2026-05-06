@@ -59,19 +59,19 @@ export default function Partners() {
     setIsAutoPlay(false);
   };
 
-  // Don't render section if loading and no partners yet
-  if (loading && partners.length === 0) return null;
-  // Don't render section if not loading and no partners
-  if (!loading && partners.length === 0) return null;
+  // For debugging: comment out to always show section
+  // if (!loading && partners.length === 0) {
+  //   return null;
+  // }
 
-  const currentPartner = partners[currentIndex];
+  const currentPartner = partners.length > 0 ? partners[currentIndex] : null;
 
   // Get visible slides (for desktop carousel effect)
-  const visibleSlides = [
+  const visibleSlides = partners.length > 0 ? [
     partners[currentIndex],
     partners[(currentIndex + 1) % partners.length],
     partners[(currentIndex + 2) % partners.length],
-  ];
+  ] : [];
 
   return (
     <section className="relative py-20 px-4 sm:px-6 lg:px-8">
@@ -88,6 +88,12 @@ export default function Partners() {
         {loading ? (
           <div className="flex items-center justify-center h-96">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+          </div>
+        ) : partners.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600 dark:text-gray-400">
+              No partners to display yet.
+            </p>
           </div>
         ) : (
           <div className="mt-16">

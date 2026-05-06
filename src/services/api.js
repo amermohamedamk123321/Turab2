@@ -603,8 +603,14 @@ export const projectRequestsApi = {
 // ===== PARTNERS API =====
 export const partnersApi = {
   list: async () => {
-    const response = await apiRequest('/partners');
-    return response.data;
+    try {
+      const response = await apiRequest('/partners');
+      console.log('✅ [Partners API] Response:', response);
+      return Array.isArray(response.data) ? response.data : [];
+    } catch (error) {
+      console.error('❌ [Partners API] Error loading partners:', error);
+      throw error;
+    }
   },
 
   getById: async (id) => {
