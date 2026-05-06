@@ -2,17 +2,53 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import Timeline from "@/components/about/Timeline";
 import Values from "@/components/about/Values";
+import Partners from "@/components/about/Partners";
 import { GlassCard } from "@/components/ui/glass-card";
 import Orb from "@/components/ui/Orb";
 import { useSEO } from "@/hooks/use-seo";
+import { useHreflang } from "@/hooks/use-hreflang";
+import { useBreadcrumbSchema } from "@/hooks/use-breadcrumb-schema";
+import { combineKeywords, combinePersianKeywords, getCanonicalUrl } from "@/utils/seo";
 
 const About = () => {
   const { t } = useTranslation();
+  useHreflang();
+  useBreadcrumbSchema([
+    { name: "Home", url: "https://turabroot.com/" },
+    { name: "About", url: "https://turabroot.com/about" }
+  ]);
+
+  const seoConfig = {
+    title: {
+      en: "About Us – Afghanistan's Leading Software Company",
+      fa: "درباره ما | شرکت نرم‌افزاری پیشرو افغانستان"
+    },
+    description: {
+      en: "Learn about Turab Root, a passionate software company in Afghanistan building websites, mobile apps, desktop applications & cybersecurity solutions for global clients.",
+      fa: "درباره تراب روت بیاموزید، یک شرکت نرم‌افزاری با انگیزه در افغانستان که وب‌سایت‌ها، اپلیکیشن‌های موبایل، برنامه‌های کمپیوتری و راه‌حل‌های امنیت سایبری برای مشتریان جهانی می‌سازد."
+    },
+    canonical: {
+      en: getCanonicalUrl("/about", "en"),
+      fa: getCanonicalUrl("/about", "fa")
+    },
+    keywords: {
+      en: combineKeywords(
+        ["about software company", "company history", "our team", "company mission",
+         "software development company", "Afghanistan tech company", "company values",
+         "professional services", "experienced developers"]
+      ),
+      fa: combinePersianKeywords(
+        ["درباره شرکت", "تیم ما", "مأموریت", "تاریخچه", "تجربه", "متخصص",
+         "نرم‌افزار", "توسعه"]
+      )
+    }
+  };
 
   useSEO({
-    title: "About Us – Afghanistan's Leading Software Company",
-    description: "Learn about Turab Root, a passionate software company in Afghanistan building websites, mobile apps, desktop applications & cybersecurity solutions for global clients.",
-    canonical: "https://turabroot.com/about",
+    title: seoConfig.title,
+    description: seoConfig.description,
+    canonical: seoConfig.canonical,
+    keywords: seoConfig.keywords.en,
   });
 
   return (
@@ -56,7 +92,7 @@ const About = () => {
               </h2>
               <p className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-6 sm:mb-7 md:mb-8">{t("about.mission.description")}</p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 pt-6 sm:pt-8">
-                <div><div className="text-2xl sm:text-3xl font-bold hero-gradient mb-2">20+</div><div className="text-sm sm:text-base text-muted-foreground">{t("about.mission.projectsDelivered")}</div></div>
+                <div><div className="text-2xl sm:text-3xl font-bold hero-gradient mb-2">9+</div><div className="text-sm sm:text-base text-muted-foreground">{t("about.mission.projectsDelivered")}</div></div>
                 <div><div className="text-2xl sm:text-3xl font-bold hero-gradient mb-2">98%</div><div className="text-sm sm:text-base text-muted-foreground">{t("about.mission.clientSatisfaction")}</div></div>
                 <div><div className="text-2xl sm:text-3xl font-bold hero-gradient mb-2">24/7</div><div className="text-sm sm:text-base text-muted-foreground">{t("about.mission.supportAvailable")}</div></div>
               </div>
@@ -66,6 +102,7 @@ const About = () => {
       </div>
 
       <Timeline />
+      <Partners />
       <Values />
 
       <section className="py-12 sm:py-16 md:py-20">

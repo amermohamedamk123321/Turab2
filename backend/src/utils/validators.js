@@ -314,3 +314,76 @@ export const validateSocialLinkUpdate = [
     .isBoolean()
     .withMessage('enabled must be a boolean'),
 ];
+
+// ===== PARTNER VALIDATION =====
+/**
+ * Validate Base64 image string
+ * Checks format and decoded size (max 50MB)
+ */
+export const validateImageBase64 = (base64String) => {
+  if (!base64String) {
+    throw new Error('Image is required');
+  }
+
+  // Check if it's a valid data URI format
+  const dataUriRegex = /^data:image\/(jpeg|png|webp|gif);base64,(.+)$/;
+  const match = base64String.match(dataUriRegex);
+
+  if (!match) {
+    throw new Error('Invalid image format. Must be JPEG, PNG, WebP, or GIF');
+  }
+
+  // Get the base64 part (after the comma)
+  const base64Data = match[2];
+
+  // Validate Base64 format
+  if (!/^[A-Za-z0-9+/]*={0,2}$/.test(base64Data)) {
+    throw new Error('Invalid Base64 format');
+  }
+
+  // Calculate decoded size
+  // Base64 encoding inflates size by ~33%, so decoded = (base64Length * 3) / 4
+  const decodedSize = Buffer.byteLength(Buffer.from(base64Data, 'base64'));
+  const maxSize = 50 * 1024 * 1024; // 50MB
+
+  if (decodedSize > maxSize) {
+    throw new Error(`Image size exceeds 50MB limit (${Math.round(decodedSize / 1024 / 1024)}MB)`);
+  }
+
+  return true;
+};
+
+export const validatePartnerCreate = [
+  body('name')
+    .trim()
+    .notEmpty()
+    .withMessage('Partner name is required')
+    .isLength({ min: 1, max: 100 })
+    .withMessage('Name must be between 1 and 100 characters'),
+  body('description')
+    .trim()
+    .notEmpty()
+    .withMessage('Partner description is required')
+    .isLength({ min: 10, max: 500 })
+    .withMessage('Description must be between 10 and 500 characters'),
+  body('image_base64')
+    .notEmpty()
+    .withMessage('Partner image is required')
+    .custom(validateImageBase64),
+];
+
+export const validatePartnerUpdate = [
+  body('name')
+    .optional()
+    .trim()
+    .isLength({ min: 1, max: 100 })
+    .withMessage('Name must be between 1 and 100 characters'),
+  body('description')
+    .optional()
+    .trim()
+    .isLength({ min: 10, max: 500 })
+    .withMessage('Description must be between 10 and 500 characters'),
+  body('image_base64')
+    .optional()
+    .custom(validateImageBase64),
+];
