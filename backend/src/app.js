@@ -70,6 +70,17 @@ const loginLimiter = rateLimit({
   skipSuccessfulRequests: true, // Don't count successful requests
 });
 
+// Admin operations rate limiter (higher limit for authenticated admins)
+const adminLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 300, // 300 requests per minute for admin operations
+  message: 'Too many requests, please try again later.',
+  skip: (req) => {
+    // Skip rate limiting for authenticated admin users
+    return req.user && req.user.role === 'admin';
+  },
+});
+
 // Contact form rate limiter
 const contactLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
@@ -94,12 +105,12 @@ const projectRequestLimiter = rateLimit({
 
 // ===== ROUTES =====
 app.use('/api/auth', loginLimiter, authRoutes);
-app.use('/api/admins', adminRoutes);
-app.use('/api/projects', projectRoutes);
+app.use('/api/admins', adminLimiter, adminRoutes);
+app.use('/api/projects', adminLimiter, projectRoutes);
 app.use('/api/messages', contactLimiter, messageRoutes);
 app.use('/api/project-requests', projectRequestLimiter, projectRequestRoutes);
-app.use('/api/social-links', socialLinkRoutes);
-app.use('/api/partners', partnerRoutes);
+app.use('/api/social-links', adminLimiter, socialLinkRoutes);
+app.use('/api/partners', adminLimiter, partnerRoutes);
 
 // ===== 404 HANDLER =====
 app.use((req, res) => {
