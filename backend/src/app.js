@@ -24,6 +24,7 @@ import projectRoutes from './routes/projects.js';
 import messageRoutes from './routes/messages.js';
 import projectRequestRoutes from './routes/projectRequests.js';
 import socialLinkRoutes from './routes/socialLinks.js';
+import partnerRoutes from './routes/partners.js';
 
 const app = express();
 
@@ -98,6 +99,7 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/messages', contactLimiter, messageRoutes);
 app.use('/api/project-requests', projectRequestLimiter, projectRequestRoutes);
 app.use('/api/social-links', socialLinkRoutes);
+app.use('/api/partners', partnerRoutes);
 
 // ===== 404 HANDLER =====
 app.use((req, res) => {

@@ -130,6 +130,11 @@
       "qualitySupport": "Quality & Support",
       "qualitySupportDesc": "We deliver top-tier quality backed by dedicated support, ensuring your success long after launch."
     },
+    "partners": {
+      "title": "Our",
+      "highlight": "Partners",
+      "subtitle": "Trusted partnerships that drive success"
+    },
     "workWithUs": {
       "title": "Work With",
       "titleHighlight": "Us",
@@ -261,7 +266,8 @@
       "projects": "Projects",
       "messages": "Messages",
       "client": "Clients",
-      "socialMedia": "Social Media"
+      "socialMedia": "Social Media",
+      "partners": "Partners"
     },
     "security": {
       "title": "Security",
@@ -310,6 +316,53 @@
         "message": "Delete client request from",
         "cancel": "Cancel",
         "confirm": "Delete"
+      }
+    },
+    "partners": {
+      "title": "Partners",
+      "subtitle": "Manage your business partners",
+      "addPartner": "Add Partner",
+      "editPartner": "Edit Partner",
+      "deletePartner": "Delete Partner",
+      "form": {
+        "name": "Partner Name",
+        "description": "Description",
+        "image": "Partner Logo",
+        "imagePreview": "Image Preview",
+        "selectImage": "Select Image",
+        "replaceImage": "Replace Image",
+        "removeImage": "Remove Image",
+        "dragDrop": "Drag and drop image here or click to select",
+        "save": "Save Partner",
+        "cancel": "Cancel",
+        "create": "Create"
+      },
+      "validation": {
+        "nameRequired": "Partner name is required",
+        "descriptionRequired": "Description is required",
+        "descriptionMinLength": "Description must be at least 10 characters",
+        "imageRequired": "Partner image is required",
+        "imageInvalid": "Invalid image format. Supported formats: JPEG, PNG, WebP, GIF",
+        "imageTooLarge": "Image size exceeds 50MB limit",
+        "maxPartnersReached": "Maximum 10 partners allowed"
+      },
+      "messages": {
+        "successAdded": "Partner added successfully",
+        "successUpdated": "Partner updated successfully",
+        "successDeleted": "Partner deleted successfully",
+        "errorAdding": "Failed to add partner",
+        "errorUpdating": "Failed to update partner",
+        "errorDeleting": "Failed to delete partner",
+        "confirmDelete": "Are you sure? This action cannot be undone.",
+        "noPartners": "No partners yet. Add one to get started!",
+        "maxPartnersWarning": "Maximum number of partners reached (10)"
+      },
+      "table": {
+        "name": "Name",
+        "description": "Description",
+        "image": "Logo",
+        "created": "Created",
+        "actions": "Actions"
       }
     }
   },

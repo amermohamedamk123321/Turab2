@@ -8,6 +8,7 @@ import { AuthProvider } from "@/hooks/use-auth";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
+import { usePerformanceTracking } from "@/hooks/use-performance";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PageTransition from "@/components/ui/PageTransition";
@@ -16,6 +17,7 @@ import Home from "./pages/Home";
 import Projects from "./pages/Projects";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import ServiceDetail from "./pages/ServiceDetail";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 
@@ -38,6 +40,7 @@ const AnimatedRoutes = () => {
         <Route path="/projects" element={<PageTransition><Projects /></PageTransition>} />
         <Route path="/about" element={<PageTransition><About /></PageTransition>} />
         <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
+        <Route path="/services/:slug" element={<PageTransition><ServiceDetail /></PageTransition>} />
         <Route path="/dashboard/*" element={
           <ProtectedRoute>
             <Dashboard />
@@ -54,6 +57,9 @@ const AppContent = () => {
   const location = useLocation();
   const isRTL = i18n.language === 'fa';
   const isDashboard = location.pathname.startsWith("/dashboard");
+
+  // Track performance metrics for SEO
+  usePerformanceTracking();
 
   useEffect(() => {
     document.documentElement.dir = isRTL ? 'rtl' : 'ltr';

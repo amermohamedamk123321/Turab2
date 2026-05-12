@@ -6,14 +6,49 @@ import ProjectRequestForm from "@/components/contact/ProjectRequestForm";
 import { GlassCard } from "@/components/ui/glass-card";
 import { MessageCircle, Clock, Shield } from "lucide-react";
 import { useSEO } from "@/hooks/use-seo";
+import { useHreflang } from "@/hooks/use-hreflang";
+import { useBreadcrumbSchema } from "@/hooks/use-breadcrumb-schema";
+import { combineKeywords, combinePersianKeywords, getCanonicalUrl } from "@/utils/seo";
 
 const Contact = () => {
   const { t } = useTranslation();
+  useHreflang();
+  useBreadcrumbSchema([
+    { name: "Home", url: "https://turabroot.com/" },
+    { name: "Contact", url: "https://turabroot.com/contact" }
+  ]);
+
+  const seoConfig = {
+    title: {
+      en: "Contact Us – Get a Free Consultation",
+      fa: "تماس با ما | مشوره رایگان"
+    },
+    description: {
+      en: "Contact Turab Root for website development, mobile apps, desktop software, or cybersecurity services. Free consultation, 24-hour response. Based in Afghanistan, serving worldwide.",
+      fa: "تماس با تراب روت برای توسعه وب، اپلیکیشن‌های موبایل، نرم‌افزار کمپیوتری یا خدمات امنیت سایبری. مشوره رایگان، پاسخ ۲۴ ساعته. مقر در افغانستان، خدمات رسانی جهانی."
+    },
+    canonical: {
+      en: getCanonicalUrl("/contact", "en"),
+      fa: getCanonicalUrl("/contact", "fa")
+    },
+    keywords: {
+      en: combineKeywords(
+        ["contact us", "free consultation", "project inquiry", "hire developers",
+         "software services", "contact software company", "get a quote", "web development contact",
+         "mobile app development services", "cybersecurity consultation"]
+      ),
+      fa: combinePersianKeywords(
+        ["تماس با ما", "مشوره رایگان", "درخواست پروژه", "استخدام توسعه‌دهندگان",
+         "خدمات نرم‌افزاری", "قیمت", "پیشنهاد", "تیم تماس"]
+      )
+    }
+  };
 
   useSEO({
-    title: "Contact Us – Get a Free Consultation",
-    description: "Contact Turab Root for website development, mobile apps, desktop software, or cybersecurity services. Free consultation, 24-hour response. Based in Afghanistan, serving worldwide.",
-    canonical: "https://turabroot.com/contact",
+    title: seoConfig.title,
+    description: seoConfig.description,
+    canonical: seoConfig.canonical,
+    keywords: seoConfig.keywords.en,
   });
 
   return (

@@ -1,4 +1,4 @@
-import { Shield, FolderOpen, Mail, LayoutDashboard, LogOut, Share2, Briefcase } from "lucide-react";
+import { Shield, FolderOpen, Mail, LayoutDashboard, LogOut, Share2, Briefcase, Handshake } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/use-auth";
@@ -23,6 +23,7 @@ const navItems = [
   { titleKey: "dashboard.nav.messages", path: "/dashboard/messages", icon: Mail },
   { titleKey: "dashboard.nav.client", title: "Clients", path: "/dashboard/project-requests", icon: Briefcase },
   { titleKey: "dashboard.nav.socialMedia", path: "/dashboard/social-media", icon: Share2 },
+  { titleKey: "dashboard.nav.partners", path: "/dashboard/partners", icon: Handshake },
 ];
 
 export function AdminSidebar() {

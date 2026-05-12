@@ -6,6 +6,7 @@ import ProjectsSection from "./dashboard/ProjectsSection";
 import MessagesSection from "./dashboard/MessagesSection";
 import ProjectRequestsSection from "./dashboard/ProjectRequestsSection";
 import SocialMediaSection from "./dashboard/SocialMediaSection";
+import PartnersSection from "./dashboard/PartnersSection";
 
 const Dashboard = () => {
   return (
@@ -17,6 +18,7 @@ const Dashboard = () => {
         <Route path="messages" element={<MessagesSection />} />
         <Route path="project-requests" element={<ProjectRequestsSection />} />
         <Route path="social-media" element={<SocialMediaSection />} />
+        <Route path="partners" element={<PartnersSection />} />
       </Routes>
     </DashboardLayout>
   );

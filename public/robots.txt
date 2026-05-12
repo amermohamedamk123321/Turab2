@@ -1,19 +1,40 @@
+# Robots.txt for Turab Root
+# Allows search engines to crawl public pages and excludes admin/private areas
+
+# Allow all bots
+User-agent: *
+Allow: /
+Allow: /projects
+Allow: /about
+Allow: /contact
+Allow: /services/
+
+# Disallow private/admin areas
+Disallow: /dashboard
+Disallow: /login
+Disallow: /admin
+Disallow: /.git
+Disallow: /node_modules
+Disallow: /*.js
+Disallow: /*.css
+Disallow: /*?*sort=
+
+# Disallow search result pages
+Disallow: /*?*filter=
+Disallow: /*?*page=
+
+# Specific rules for Google
 User-agent: Googlebot
 Allow: /
 
+# Specific rules for Bing
 User-agent: Bingbot
 Allow: /
 
-User-agent: Twitterbot
+# Specific rules for Yandex (important for Persian/Farsi content)
+User-agent: YandexBot
 Allow: /
+Crawl-delay: 1
 
-User-agent: facebookexternalhit
-Allow: /
-
-User-agent: LinkedInBot
-Allow: /
-
-User-agent: *
-Allow: /
-
+# Point to sitemap
 Sitemap: https://turabroot.com/sitemap.xml
