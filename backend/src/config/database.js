@@ -156,10 +156,22 @@ function initializeSchema() {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
       description TEXT NOT NULL,
-      image_base64 LONGTEXT NOT NULL,
       position INTEGER DEFAULT 0,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  // Create partner_images table for multiple images per partner (up to 3)
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS partner_images (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      partner_id INTEGER NOT NULL,
+      image_base64 LONGTEXT NOT NULL,
+      display_order INTEGER DEFAULT 0,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (partner_id) REFERENCES partners(id) ON DELETE CASCADE,
+      UNIQUE(partner_id, display_order)
     )
   `);
 
@@ -174,9 +186,116 @@ function initializeSchema() {
     CREATE INDEX IF NOT EXISTS idx_audit_logs_admin_id ON audit_logs(admin_id);
     CREATE INDEX IF NOT EXISTS idx_audit_logs_timestamp ON audit_logs(timestamp);
     CREATE INDEX IF NOT EXISTS idx_partners_created_at ON partners(created_at);
+    CREATE INDEX IF NOT EXISTS idx_partner_images_partner_id ON partner_images(partner_id);
+    CREATE INDEX IF NOT EXISTS idx_partner_images_display_order ON partner_images(display_order);
   `);
 
   console.log('Database schema initialized successfully');
+}
+
+/**
+ * Migrate partner images from old single-image column to new multi-image table
+ * Runs after schema initialization
+ */
+function migratePartnerImages() {
+  try {
+    // Check if old image_base64 column exists in partners table
+    const tableInfo = db.pragma('table_info(partners)');
+    const hasOldImageColumn = tableInfo.some(col => col.name === 'image_base64');
+
+    if (!hasOldImageColumn) {
+      // Old column doesn't exist, schema is already new
+      return;
+    }
+
+    console.log('🔄 Migrating partner images to new table...');
+
+    // Get all partners with image_base64
+    const partnersWithImages = db.prepare(`
+      SELECT id, image_base64 FROM partners WHERE image_base64 IS NOT NULL AND image_base64 != ''
+    `).all();
+
+    if (partnersWithImages.length === 0) {
+      console.log('✅ No existing images to migrate');
+      // Drop old column
+      dropOldPartnerImageColumn();
+      return;
+    }
+
+    // Migrate each image to the new table
+    partnersWithImages.forEach(partner => {
+      // Check if image already exists in new table
+      const existing = db.prepare(`
+        SELECT id FROM partner_images WHERE partner_id = ? AND display_order = 0
+      `).get(partner.id);
+
+      if (!existing) {
+        db.prepare(`
+          INSERT INTO partner_images (partner_id, image_base64, display_order, created_at)
+          VALUES (?, ?, 0, datetime('now'))
+        `).run(partner.id, partner.image_base64);
+      }
+    });
+
+    console.log(`✅ Migrated ${partnersWithImages.length} partner images`);
+
+    // Drop old column after successful migration
+    dropOldPartnerImageColumn();
+  } catch (error) {
+    console.error('⚠️  Migration warning (non-fatal):', error.message);
+    // Don't throw - let app continue even if migration fails
+  }
+}
+
+/**
+ * Drop the old image_base64 column from partners table
+ */
+function dropOldPartnerImageColumn() {
+  try {
+    // SQLite doesn't support ALTER TABLE DROP COLUMN, so we need to recreate the table
+    const tableInfo = db.pragma('table_info(partners)');
+    const hasOldImageColumn = tableInfo.some(col => col.name === 'image_base64');
+
+    if (!hasOldImageColumn) {
+      return; // Column already doesn't exist
+    }
+
+    console.log('🔄 Cleaning up old image column...');
+
+    // Create new table without image_base64
+    db.exec(`
+      CREATE TABLE partners_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        description TEXT NOT NULL,
+        position INTEGER DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Copy data
+    db.exec(`
+      INSERT INTO partners_new (id, name, description, position, created_at, updated_at)
+      SELECT id, name, description, position, created_at, updated_at FROM partners
+    `);
+
+    // Drop old table
+    db.exec('DROP TABLE partners');
+
+    // Rename new table
+    db.exec('ALTER TABLE partners_new RENAME TO partners');
+
+    // Recreate indexes
+    db.exec(`
+      CREATE INDEX IF NOT EXISTS idx_partners_created_at ON partners(created_at)
+    `);
+
+    console.log('✅ Old image column removed');
+  } catch (error) {
+    console.error('⚠️  Cleanup warning (non-fatal):', error.message);
+    // Don't throw - let app continue
+  }
 }
 
 /**
@@ -223,12 +342,16 @@ function seedDefaultAdmin() {
 
 /**
  * Seed default projects for admin dashboard
- * Removes old projects and adds 4 new featured projects
+ * Only seeds if no projects exist (prevents data loss on restart)
  */
 function seedDefaultProjects() {
   try {
-    // Clear existing projects to start fresh
-    db.prepare('DELETE FROM projects').run();
+    // Check if projects already exist
+    const count = db.prepare('SELECT COUNT(*) as total FROM projects').get();
+    if (count.total > 0) {
+      console.log('✅ Projects already exist, skipping seed');
+      return;
+    }
 
     console.log('🔧 Setting up default projects...');
 
@@ -356,16 +479,23 @@ function seedDefaultPartners() {
       }
     ];
 
-    // Insert partners
+    // Insert partners and their images
     partnersData.forEach((partner) => {
-      db.prepare(`
-        INSERT INTO partners (name, description, image_base64, created_at, updated_at)
-        VALUES (?, ?, ?, datetime('now'), datetime('now'))
+      const result = db.prepare(`
+        INSERT INTO partners (name, description, created_at, updated_at)
+        VALUES (?, ?, datetime('now'), datetime('now'))
       `).run(
         partner.name,
-        partner.description,
-        partner.image_base64
+        partner.description
       );
+
+      // Insert image(s) into partner_images table
+      if (partner.image_base64) {
+        db.prepare(`
+          INSERT INTO partner_images (partner_id, image_base64, display_order, created_at)
+          VALUES (?, ?, 0, datetime('now'))
+        `).run(result.lastInsertRowid, partner.image_base64);
+      }
     });
 
     console.log(`✅ Default partners created (${partnersData.length} partners)`);
@@ -377,6 +507,7 @@ function seedDefaultPartners() {
 
 // Initialize on import
 initializeSchema();
+migratePartnerImages();
 seedDefaultAdmin();
 seedDefaultProjects();
 seedDefaultPartners();

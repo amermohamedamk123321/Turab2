@@ -167,19 +167,6 @@ export const updateProject = asyncHandler(async (req, res) => {
     throw new AppError('Project not found', 404);
   }
 
-  // Generate thumbnail if video_url is provided
-  let thumbnail_url = project.thumbnail_url;
-  if (video_url !== undefined && video_url !== project.video_url) {
-    if (video_url) {
-      thumbnail_url = getYouTubeThumbnail(video_url);
-      if (!thumbnail_url) {
-        throw new AppError('Invalid YouTube URL', 400);
-      }
-    } else {
-      thumbnail_url = null;
-    }
-  }
-
   // Build update query dynamically
   const updates = [];
   const values = [];
@@ -200,18 +187,33 @@ export const updateProject = asyncHandler(async (req, res) => {
     updates.push('url = ?');
     values.push(url);
   }
+
+  // Generate thumbnail if video_url is provided or changed
   if (video_url !== undefined) {
     updates.push('video_url = ?');
     values.push(video_url);
-  }
-  if (thumbnail_url !== undefined) {
+
+    let thumbnail_url = null;
+    if (video_url) {
+      thumbnail_url = getYouTubeThumbnail(video_url);
+      if (!thumbnail_url) {
+        throw new AppError('Invalid YouTube URL', 400);
+      }
+    }
+
     updates.push('thumbnail_url = ?');
     values.push(thumbnail_url);
+  }
+
+  if (category !== undefined) {
+    updates.push('category = ?');
+    values.push(category);
   }
   if (category !== undefined) {
     updates.push('category = ?');
     values.push(category);
   }
+
   if (is_website !== undefined) {
     updates.push('is_website = ?');
     values.push(is_website ? 1 : 0);
