@@ -4,6 +4,7 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { Instagram, Facebook, MessageCircle, Phone, Mail, MapPin, Clock, ArrowRight, Youtube, Twitter, Linkedin, Globe } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { socialLinksApi } from "@/services/api";
 import logo from "@/assets/turab-root-logo.png";
 
 const PLATFORM_META = {
@@ -21,10 +22,17 @@ const Footer = () => {
   const [socialLinks, setSocialLinks] = useState([]);
 
   useEffect(() => {
-    try {
-      const stored = JSON.parse(localStorage.getItem("turab_social_links") || "[]");
-      setSocialLinks(stored.filter(l => l.enabled));
-    } catch { setSocialLinks([]); }
+    const fetchSocialLinks = async () => {
+      try {
+        const links = await socialLinksApi.list();
+        setSocialLinks(Array.isArray(links) ? links.filter(l => l.enabled) : []);
+      } catch (error) {
+        console.warn('Failed to fetch social links:', error);
+        setSocialLinks([]);
+      }
+    };
+
+    fetchSocialLinks();
   }, []);
 
   const navItems = [

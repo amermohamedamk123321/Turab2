@@ -15,8 +15,9 @@ import {
 } from 'lucide-react';
 
 const MAX_PARTNERS = 10;
-const MAX_IMAGE_SIZE = 50 * 1024 * 1024; // 50MB
-const SUPPORTED_FORMATS = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const MAX_IMAGES_PER_PARTNER = 3;
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB per image
+const SUPPORTED_FORMATS = ['image/jpeg', 'image/png', 'image/webp'];
 
 export default function PartnersSection() {
   const { t } = useTranslation();
@@ -31,7 +32,7 @@ export default function PartnersSection() {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    image_base64: '',
+    images: [],
   });
   const [formErrors, setFormErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -69,8 +70,8 @@ export default function PartnersSection() {
       errors.description = t('dashboard.partners.validation.descriptionMinLength');
     }
 
-    if (!formData.image_base64) {
-      errors.image_base64 = t('dashboard.partners.validation.imageRequired');
+    if (!formData.images || formData.images.length === 0) {
+      errors.images = t('dashboard.partners.validation.imageRequired');
     }
 
     setFormErrors(errors);
@@ -82,18 +83,30 @@ export default function PartnersSection() {
 
     // Validate file type
     if (!SUPPORTED_FORMATS.includes(file.type)) {
-      setFormErrors({
-        ...formErrors,
-        image_base64: t('dashboard.partners.validation.imageInvalid'),
+      toast({
+        title: 'Invalid file type',
+        description: 'Only JPG, PNG, and WebP formats are supported',
+        variant: 'destructive',
       });
       return;
     }
 
     // Validate file size
     if (file.size > MAX_IMAGE_SIZE) {
-      setFormErrors({
-        ...formErrors,
-        image_base64: t('dashboard.partners.validation.imageTooLarge'),
+      toast({
+        title: 'File too large',
+        description: `Maximum file size is ${MAX_IMAGE_SIZE / (1024 * 1024)}MB per image`,
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // Check max images
+    if (formData.images.length >= MAX_IMAGES_PER_PARTNER) {
+      toast({
+        title: 'Maximum images reached',
+        description: `You can upload up to ${MAX_IMAGES_PER_PARTNER} images per partner`,
+        variant: 'destructive',
       });
       return;
     }
@@ -103,14 +116,21 @@ export default function PartnersSection() {
     reader.onload = (e) => {
       setFormData({
         ...formData,
-        image_base64: e.target.result,
+        images: [...formData.images, e.target.result],
       });
       setFormErrors({
         ...formErrors,
-        image_base64: '',
+        images: '',
       });
     };
     reader.readAsDataURL(file);
+  };
+
+  const removeImage = (index) => {
+    setFormData({
+      ...formData,
+      images: formData.images.filter((_, i) => i !== index),
+    });
   };
 
   const handleFileInput = (e) => {
@@ -152,7 +172,7 @@ export default function PartnersSection() {
       setFormData({
         name: partner.name,
         description: partner.description,
-        image_base64: partner.image_base64,
+        images: partner.images || [],
       });
     } else {
       setIsEditing(false);
@@ -160,7 +180,7 @@ export default function PartnersSection() {
       setFormData({
         name: '',
         description: '',
-        image_base64: '',
+        images: [],
       });
     }
     setFormErrors({});
@@ -172,7 +192,7 @@ export default function PartnersSection() {
     setFormData({
       name: '',
       description: '',
-      image_base64: '',
+      images: [],
     });
     setFormErrors({});
   };
@@ -311,13 +331,23 @@ export default function PartnersSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {partners.map((partner) => (
             <GlassCard key={partner.id} className="p-4 hover:shadow-lg transition">
-              {/* Image */}
-              {partner.image_base64 && (
-                <img
-                  src={partner.image_base64}
-                  alt={partner.name}
-                  className="w-full h-40 object-cover rounded-lg mb-4"
-                />
+              {/* Images Grid */}
+              {partner.images && partner.images.length > 0 ? (
+                <div className="grid grid-cols-2 gap-2 mb-4">
+                  {partner.images.slice(0, 3).map((image, idx) => (
+                    <div key={idx} className="relative">
+                      <img
+                        src={image}
+                        alt={`${partner.name} - ${idx + 1}`}
+                        className="w-full h-24 object-cover rounded-lg"
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="w-full h-24 bg-gray-200 dark:bg-gray-700 rounded-lg mb-4 flex items-center justify-center">
+                  <span className="text-gray-400">No images</span>
+                </div>
               )}
 
               {/* Info */}
@@ -419,61 +449,61 @@ export default function PartnersSection() {
                 )}
               </div>
 
-              {/* Image Upload */}
+              {/* Images Upload */}
               <div>
                 <label className="block text-sm font-medium text-gray-900 dark:text-white mb-2">
-                  {t('dashboard.partners.form.image')}
+                  Images (Up to {MAX_IMAGES_PER_PARTNER}, {MAX_IMAGE_SIZE / (1024 * 1024)}MB each)
                 </label>
 
-                {/* Image Preview */}
-                {formData.image_base64 && (
-                  <div className="mb-3 relative">
-                    <img
-                      src={formData.image_base64}
-                      alt="Preview"
-                      className="w-full h-40 object-cover rounded-lg"
-                    />
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setFormData({ ...formData, image_base64: '' })
-                      }
-                      className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full hover:bg-red-700"
-                    >
-                      <X size={16} />
-                    </button>
+                {/* Images Preview Grid */}
+                {formData.images.length > 0 && (
+                  <div className="grid grid-cols-2 gap-2 mb-3">
+                    {formData.images.map((image, idx) => (
+                      <div key={idx} className="relative">
+                        <img
+                          src={image}
+                          alt={`Preview ${idx + 1}`}
+                          className="w-full h-24 object-cover rounded-lg"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(idx)}
+                          className="absolute top-1 right-1 bg-red-600 text-white p-1 rounded-full hover:bg-red-700"
+                        >
+                          <X size={14} />
+                        </button>
+                      </div>
+                    ))}
                   </div>
                 )}
 
-                {/* Drag and drop area */}
-                <div
-                  ref={dragRef}
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                  onClick={() => fileInputRef.current?.click()}
-                  className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition ${
-                    formData.image_base64
-                      ? 'border-gray-300 dark:border-gray-600'
-                      : 'border-gray-300 dark:border-gray-600 hover:border-blue-500'
-                  }`}
-                >
-                  <Upload size={32} className="mx-auto mb-2 text-gray-400" />
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">
-                    {t('dashboard.partners.form.dragDrop')}
-                  </p>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp,image/gif"
-                    onChange={handleFileInput}
-                    className="hidden"
-                  />
-                </div>
+                {/* Drag and drop area - only show if can add more */}
+                {formData.images.length < MAX_IMAGES_PER_PARTNER && (
+                  <div
+                    ref={dragRef}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    onClick={() => fileInputRef.current?.click()}
+                    className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition border-gray-300 dark:border-gray-600 hover:border-blue-500"
+                  >
+                    <Upload size={32} className="mx-auto mb-2 text-gray-400" />
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">
+                      {t('dashboard.partners.form.dragDrop')}
+                    </p>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      onChange={handleFileInput}
+                      className="hidden"
+                    />
+                  </div>
+                )}
 
-                {formErrors.image_base64 && (
+                {formErrors.images && (
                   <p className="text-red-500 text-sm mt-2">
-                    {formErrors.image_base64}
+                    {formErrors.images}
                   </p>
                 )}
               </div>

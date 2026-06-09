@@ -219,21 +219,38 @@ export default function Partners() {
 
 /**
  * PartnerCard component
- * Displays a partner with glassmorphism design
+ * Displays a partner with glassmorphism design and support for multiple images
  */
 function PartnerCard({ partner }) {
+  const [imageIndex, setImageIndex] = useState(0);
+
+  const images = partner.images && Array.isArray(partner.images) ? partner.images : [];
+  const currentImage = images.length > 0 ? images[imageIndex] : null;
+  const hasMultipleImages = images.length > 1;
+
   return (
     <GlassCard className="overflow-hidden hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
       {/* Image Container */}
-      {partner.image_base64 && (
+      {currentImage ? (
         <div className="relative h-40 md:h-48 overflow-hidden bg-gradient-to-br from-gray-200 to-gray-100 dark:from-gray-700 dark:to-gray-800">
           <img
-            src={partner.image_base64}
-            alt={partner.name}
+            src={currentImage}
+            alt={`${partner.name} - ${imageIndex + 1}`}
             className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
           />
           {/* Overlay gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+
+          {/* Image counter - only show if multiple images */}
+          {hasMultipleImages && (
+            <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+              {imageIndex + 1}/{images.length}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="relative h-40 md:h-48 bg-gradient-to-br from-gray-200 to-gray-100 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center">
+          <span className="text-gray-400">No image</span>
         </div>
       )}
 
@@ -248,6 +265,25 @@ function PartnerCard({ partner }) {
         <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed line-clamp-3 mb-4">
           {partner.description}
         </p>
+
+        {/* Image Thumbnails - show if multiple images */}
+        {hasMultipleImages && (
+          <div className="flex gap-2 mb-4">
+            {images.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setImageIndex(idx)}
+                className={`w-8 h-8 rounded overflow-hidden border-2 transition ${
+                  idx === imageIndex
+                    ? 'border-blue-500 opacity-100'
+                    : 'border-gray-300 dark:border-gray-600 opacity-60 hover:opacity-100'
+                }`}
+              >
+                <img src={images[idx]} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Decorative bottom accent */}
         <div className="flex gap-1 pt-2 border-t border-white/10">

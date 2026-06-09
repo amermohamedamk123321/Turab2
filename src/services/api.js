@@ -348,11 +348,15 @@ export const projectsApi = {
   list: async () => {
     try {
       const response = await apiRequest('/projects');
-      // Cache successful response
+      // Cache successful response with mapped format
       if (response.data) {
-        FallbackStorage.setProjects(response.data);
+        const mappedProjects = Array.isArray(response.data)
+          ? response.data.map(mapProjectResponse)
+          : [];
+        FallbackStorage.setProjects(mappedProjects);
+        return mappedProjects;
       }
-      return response.data;
+      return [];
     } catch (error) {
       if (error.message === 'BACKEND_UNAVAILABLE') {
         console.warn('Backend unavailable, using cached projects');
@@ -618,24 +622,24 @@ export const partnersApi = {
     return response.data;
   },
 
-  create: async ({ name, description, image_base64 }) => {
+  create: async ({ name, description, images = [] }) => {
     const response = await apiRequest('/partners', {
       method: 'POST',
       body: JSON.stringify({
         name,
         description,
-        image_base64,
+        images: Array.isArray(images) ? images : [],
       }),
     });
 
     return response.data;
   },
 
-  update: async (id, { name, description, image_base64 }) => {
+  update: async (id, { name, description, images }) => {
     const data = {};
     if (name !== undefined) data.name = name;
     if (description !== undefined) data.description = description;
-    if (image_base64 !== undefined) data.image_base64 = image_base64;
+    if (images !== undefined) data.images = Array.isArray(images) ? images : [];
 
     const response = await apiRequest(`/partners/${id}`, {
       method: 'PUT',

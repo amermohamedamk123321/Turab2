@@ -39,6 +39,7 @@ export const getSocialLink = asyncHandler(async (req, res) => {
  * Create social link
  * POST /api/social-links
  * Admin only
+ * If platform already exists, update it instead (re-enable)
  */
 export const createSocialLink = asyncHandler(async (req, res) => {
   const { platform, url, enabled } = req.body;
@@ -46,10 +47,28 @@ export const createSocialLink = asyncHandler(async (req, res) => {
   // Check if platform already exists
   const existing = db.prepare('SELECT id FROM social_links WHERE platform = ?').get(platform);
   if (existing) {
-    throw new AppError('Social link for this platform already exists', 400);
+    // Update existing link instead of throwing error
+    db.prepare(`
+      UPDATE social_links SET url = ?, enabled = ?, updated_at = datetime('now')
+      WHERE id = ?
+    `).run(url, enabled !== false ? 1 : 0, existing.id);
+
+    const socialLink = db.prepare('SELECT * FROM social_links WHERE id = ?').get(existing.id);
+
+    // Log audit event
+    db.prepare(`
+      INSERT INTO audit_logs (admin_id, action, resource_type, resource_id)
+      VALUES (?, ?, ?, ?)
+    `).run(req.user.id, 'UPDATE_SOCIAL_LINK', 'SOCIAL_LINK', existing.id);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Social link updated successfully',
+      data: socialLink,
+    });
   }
 
-  // Insert social link
+  // Insert social link if it doesn't exist
   const result = db.prepare(`
     INSERT INTO social_links (platform, url, enabled, created_at, updated_at)
     VALUES (?, ?, ?, datetime('now'), datetime('now'))
